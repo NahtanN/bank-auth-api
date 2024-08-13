@@ -4,17 +4,19 @@ import UserRepositoryInterface from "src/domain/user/repository/user.repository.
 import SignUpRequestInterface from "./dtos/request/sing_up.request.interface";
 import DefaultResponseInterface from "src/domain/@shared/response/default_response.interface";
 import AppException from "src/@shared/exceptions.shared";
-import UserEntity from "src/domain/user/entity/user.entity";
 import SignInRequestInterface from "./dtos/request/sign_in.request.interface";
 import SignInResponseInterface from "./dtos/response/sign_in.response.interface";
 import { pbkdf2Sync, randomBytes } from "crypto";
+import { UserEntity } from "src/infrastructure/database/typeorm/user/user.entity.typeorm";
+import UserEntityInterface from "src/domain/user/entity/user.entity.interface";
 
 export default class AuthenticationService
-  implements AuthenticationServiceInterface {
+  implements AuthenticationServiceInterface
+{
   constructor(
     private readonly jwtService: JwtServiceInterface,
     private readonly userRepository: UserRepositoryInterface,
-  ) { }
+  ) {}
 
   async signUp(dto: SignUpRequestInterface): Promise<DefaultResponseInterface> {
     const userExists = await this.userRepository.existsByEmail(dto.email);
@@ -25,7 +27,7 @@ export default class AuthenticationService
     // TODO: validate password strength
     const encodedPassword = this.hashPassword(dto.password);
 
-    const user: UserEntity = await this.userRepository.create(
+    const user: UserEntityInterface = await this.userRepository.create(
       dto.name,
       dto.email,
       `${encodedPassword.salt}.${encodedPassword.hash}`,
@@ -38,7 +40,7 @@ export default class AuthenticationService
   }
 
   async signIn(dto: SignInRequestInterface): Promise<SignInResponseInterface> {
-    let user: UserEntity | null;
+    let user: UserEntityInterface | null;
     try {
       user = await this.userRepository.findByEmail(dto.login);
     } catch (error) {

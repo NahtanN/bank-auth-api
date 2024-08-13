@@ -1,4 +1,4 @@
-import UserEntity from "../entity/user.entity";
+import UserEntityInterface from "../entity/user.entity.interface";
 
 export default interface UserRepositoryInterface {
   /**
@@ -26,7 +26,7 @@ export default interface UserRepositoryInterface {
     email: string,
     password: string,
     cpf: string,
-  ): Promise<UserEntity>;
+  ): Promise<UserEntityInterface>;
 
   /**
    * Return a UserEntity if `email` is located on `users` table. If not, returns null.
@@ -34,5 +34,5 @@ export default interface UserRepositoryInterface {
    * @returns UserEntity | null
    * @throws ApiError
    * */
-  findByEmail(email: string): Promise<UserEntity | null>;
+  findByEmail(email: string): Promise<UserEntityInterface | null>;
 }

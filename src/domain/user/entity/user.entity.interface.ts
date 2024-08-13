@@ -1,4 +1,4 @@
-export default interface UserEntity {
+export default interface UserEntityInterface {
   userId: string;
   name: string;
   email: string;
@@ -7,5 +7,5 @@ export default interface UserEntity {
   acceptedAt: Date;
   createdAt: Date;
   updatedAt: Date;
-  deletedAt: Date;
+  deletedAt?: Date;
 }
