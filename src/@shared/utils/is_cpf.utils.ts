@@ -1,7 +1,5 @@
 export function isCpf(cpf: string): boolean {
-  console.log(cpf);
   cpf = cpf.replace(/[^0-9]/g, "");
-  console.log(cpf);
 
   const BLACKLIST: Array<string> = [
     "00000000000",

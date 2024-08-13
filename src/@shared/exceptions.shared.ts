@@ -1,8 +1,8 @@
 export default class AppException extends Error {
   statusCode: number;
-  data?: Record<string, any>;
+  data?: any;
 
-  constructor(message: string, statusCode: number, data?: Record<string, any>) {
+  constructor(message: string, statusCode: number, data?: any) {
     super(message);
     this.name = this.constructor.name;
     this.statusCode = statusCode;
@@ -13,12 +13,18 @@ export default class AppException extends Error {
     }
   }
 
-  static badRequest(message: string = "Bad Request"): AppException {
-    return new AppException(message, 400);
+  static badRequest(
+    message: string = "Bad Request",
+    data?: string[],
+  ): AppException {
+    return new AppException(message, 400, data);
   }
 
-  static unauthorized(message: string = "Unauthorized"): AppException {
-    return new AppException(message, 401);
+  static unauthorized(
+    message: string = "Unauthorized",
+    data?: string[],
+  ): AppException {
+    return new AppException(message, 401, data);
   }
 
   static paymentRequired(message: string = "Payment Required"): AppException {

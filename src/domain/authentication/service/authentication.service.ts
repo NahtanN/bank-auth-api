@@ -18,9 +18,25 @@ export default class AuthenticationService
   ) {}
 
   async signUp(dto: SignUpRequestInterface): Promise<DefaultResponseInterface> {
-    const userExists = await this.userRepository.exists(dto.email);
-    if (userExists) {
-      throw AppException.unauthorized("Email já está em uso.");
+    const errorMessages = [];
+
+    const emailAlreadyInUse = await this.userRepository.existsByEmail(
+      dto.email,
+    );
+    if (emailAlreadyInUse) {
+      errorMessages.push("Email já cadastrado.");
+    }
+
+    const cpfAlreadyInUse = await this.userRepository.existsByCpf(dto.cpf);
+    if (cpfAlreadyInUse) {
+      errorMessages.push("CPF já cadastrado.");
+    }
+
+    if (errorMessages.length > 0) {
+      throw AppException.badRequest(
+        "Erro ao cadastrar usuário.",
+        errorMessages,
+      );
     }
 
     // TODO: validate password strength
