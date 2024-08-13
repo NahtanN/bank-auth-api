@@ -15,7 +15,6 @@ export function SignUpAuthenticationDocs() {
       schema: {
         example: {
           message: "Usuário cadastrado com sucesso.",
-          accessToken: "eyJhbGciOiJIUzI1NiIsIn...",
         },
       },
     }),

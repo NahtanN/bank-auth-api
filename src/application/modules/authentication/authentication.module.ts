@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { AuthenticationController } from "./authentication.controller";
 import { AppAuthenticationService } from "./authentication.service";
+import { UserModule } from "../user/user.module";
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AppAuthenticationService } from "./authentication.service";
         algorithms: ["HS384"],
       },
     }),
+    UserModule,
   ],
   controllers: [AuthenticationController],
   providers: [

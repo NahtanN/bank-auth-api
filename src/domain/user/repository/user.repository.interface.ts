@@ -2,16 +2,10 @@ import UserEntityInterface from "../entity/user.entity.interface";
 
 export default interface UserRepositoryInterface {
   /**
-   * Validate if user email is already on the database
+   * Validate if user already on the database. `value` should be an `email` or `cpf`
    * @param email string
    * */
-  existsByEmail(email: string): Promise<boolean>;
-
-  /**
-   * Validate if user cpf is already on the database
-   * @param cpf string
-   * */
-  existsByCpf(cpf: string): Promise<boolean>;
+  exists(value: string): Promise<boolean>;
 
   /**
    * Insert new user into database and return a UserEntity

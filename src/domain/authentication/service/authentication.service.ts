@@ -7,7 +7,6 @@ import AppException from "src/@shared/exceptions.shared";
 import SignInRequestInterface from "./dtos/request/sign_in.request.interface";
 import SignInResponseInterface from "./dtos/response/sign_in.response.interface";
 import { pbkdf2Sync, randomBytes } from "crypto";
-import { UserEntity } from "src/infrastructure/database/typeorm/user/user.entity.typeorm";
 import UserEntityInterface from "src/domain/user/entity/user.entity.interface";
 
 export default class AuthenticationService
@@ -19,7 +18,7 @@ export default class AuthenticationService
   ) {}
 
   async signUp(dto: SignUpRequestInterface): Promise<DefaultResponseInterface> {
-    const userExists = await this.userRepository.existsByEmail(dto.email);
+    const userExists = await this.userRepository.exists(dto.email);
     if (userExists) {
       throw AppException.unauthorized("Email já está em uso.");
     }

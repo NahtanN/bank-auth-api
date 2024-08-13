@@ -7,6 +7,8 @@ import AuthenticationServiceInterface from "src/domain/authentication/service/au
 import SignInRequestInterface from "src/domain/authentication/service/dtos/request/sign_in.request.interface";
 import SignUpRequestInterface from "src/domain/authentication/service/dtos/request/sing_up.request.interface";
 import SignInResponseInterface from "src/domain/authentication/service/dtos/response/sign_in.response.interface";
+import { SignInDto } from "./dtos/sign_in.dto";
+import { SignUpDto } from "./dtos/sign_up.dto";
 
 @ApiTags("authentication")
 @Controller({
@@ -17,21 +19,17 @@ export class AuthenticationController {
   constructor(
     @Inject("AuthenticationServiceInterface")
     private readonly service: AuthenticationServiceInterface,
-  ) { }
+  ) {}
 
   @SignUpAuthenticationDocs()
   @Post("/sign-up")
-  signUp(
-    @Body() dto: SignUpRequestInterface,
-  ): Promise<DefaultResponseInterface> {
+  signUp(@Body() dto: SignUpDto): Promise<DefaultResponseInterface> {
     return this.service.signUp(dto);
   }
 
   @SignInAuthenticationDocs()
   @Post("/sign-in")
-  signIn(
-    @Body() dto: SignInRequestInterface,
-  ): Promise<SignInResponseInterface> {
+  signIn(@Body() dto: SignInDto): Promise<SignInResponseInterface> {
     return this.service.signIn(dto);
   }
 }
