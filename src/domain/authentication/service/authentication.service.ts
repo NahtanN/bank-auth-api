@@ -1,13 +1,13 @@
-import JwtServiceInterface from "src/infrastructure/jwt_service/jwt.service.interface";
+import JwtServiceInterface from "@infrastructure/jwt_service/jwt.service.interface";
 import AuthenticationServiceInterface from "./authentication.service.interface";
-import UserRepositoryInterface from "src/domain/user/repository/user.repository.interface";
+import UserRepositoryInterface from "@domain/user/repository/user.repository.interface";
 import SignUpRequestInterface from "./dtos/request/sing_up.request.interface";
-import DefaultResponseInterface from "src/domain/@shared/response/default_response.interface";
-import AppException from "src/@shared/exceptions.shared";
+import DefaultResponseInterface from "@domain/@shared/response/default_response.interface";
+import AppException from "@shared/exceptions.shared";
 import SignInRequestInterface from "./dtos/request/sign_in.request.interface";
 import SignInResponseInterface from "./dtos/response/sign_in.response.interface";
 import { pbkdf2Sync, randomBytes } from "crypto";
-import UserEntityInterface from "src/domain/user/entity/user.entity.interface";
+import UserEntityInterface from "@domain/user/entity/user.entity.interface";
 
 export default class AuthenticationService
   implements AuthenticationServiceInterface
@@ -44,7 +44,7 @@ export default class AuthenticationService
     // TODO: validate password strength
     const encodedPassword = this.hashPassword(dto.password);
 
-    const user: UserEntityInterface = await this.userRepository.create(
+    await this.userRepository.create(
       dto.name,
       dto.email,
       `${encodedPassword.salt}.${encodedPassword.hash}`,
