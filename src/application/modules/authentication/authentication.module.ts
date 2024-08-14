@@ -3,6 +3,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { AuthenticationController } from "./authentication.controller";
 import { AppAuthenticationService } from "./authentication.service";
 import { UserModule } from "../user/user.module";
+import { OutboxModule } from "../outbox/outbox.module";
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { UserModule } from "../user/user.module";
       },
     }),
     UserModule,
+    OutboxModule,
   ],
   controllers: [AuthenticationController],
   providers: [

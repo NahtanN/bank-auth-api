@@ -8,6 +8,10 @@ import SignInRequestInterface from "./dtos/request/sign_in.request.interface";
 import SignInResponseInterface from "./dtos/response/sign_in.response.interface";
 import { pbkdf2Sync, randomBytes } from "crypto";
 import UserEntityInterface from "@domain/user/entity/user.entity.interface";
+import { OutboxRepositoryInterface } from "@domain/outbox/repository/outbox.repository.interface";
+import { getManager } from "typeorm";
+import { query } from "express";
+import { AppEvents } from "@shared/events.shared";
 
 export default class AuthenticationService
   implements AuthenticationServiceInterface
@@ -15,6 +19,7 @@ export default class AuthenticationService
   constructor(
     private readonly jwtService: JwtServiceInterface,
     private readonly userRepository: UserRepositoryInterface,
+    private readonly outboxRepository: OutboxRepositoryInterface,
   ) {}
 
   async signUp(dto: SignUpRequestInterface): Promise<DefaultResponseInterface> {
@@ -49,6 +54,17 @@ export default class AuthenticationService
       dto.email,
       `${encodedPassword.salt}.${encodedPassword.hash}`,
       dto.cpf,
+      async (user, transactionManager) =>
+        this.outboxRepository.create(
+          AppEvents.USER_CREATED,
+          {
+            userId: user.userId,
+            name: user.name,
+            email: user.email,
+            cpf: user.cpf,
+          },
+          transactionManager,
+        ),
     );
 
     return {

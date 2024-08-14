@@ -26,6 +26,7 @@ export default interface UserRepositoryInterface {
     email: string,
     password: string,
     cpf: string,
+    ...callbacks: CreateUserCallback[]
   ): Promise<UserEntityInterface>;
 
   /**
@@ -35,4 +36,8 @@ export default interface UserRepositoryInterface {
    * @throws ApiError
    * */
   find(value: string): Promise<UserEntityInterface | null>;
+}
+
+export interface CreateUserCallback {
+  (user: UserEntityInterface, transactionManager?: any): void;
 }

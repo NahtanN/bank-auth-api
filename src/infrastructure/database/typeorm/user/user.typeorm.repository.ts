@@ -1,30 +1,56 @@
 import UserEntityInterface from "src/domain/user/entity/user.entity.interface";
-import UserRepositoryInterface from "src/domain/user/repository/user.repository.interface";
-import { Repository } from "typeorm";
+import UserRepositoryInterface, {
+  CreateUserCallback,
+} from "src/domain/user/repository/user.repository.interface";
+import { DataSource, getManager, Repository } from "typeorm";
 import AppException from "src/@shared/exceptions.shared";
 import { UserEntity } from "./user.typeorm.entity";
 
 export class UserTypeormRepository implements UserRepositoryInterface {
-  constructor(private readonly userRepository: Repository<UserEntity>) {}
+  constructor(
+    private readonly dataSource: DataSource,
+    private readonly userRepository: Repository<UserEntity>,
+  ) {}
+
+  async getTransactionManager() {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+
+    return {
+      queryRunner,
+      manager: queryRunner.manager,
+    };
+  }
 
   async create(
     name: string,
     email: string,
     password: string,
     cpf: string,
+    ...callbacks: CreateUserCallback[]
   ): Promise<UserEntityInterface> {
+    const { queryRunner, manager } = await this.getTransactionManager();
+
     try {
-      const user = await this.userRepository.save({
+      await queryRunner.startTransaction();
+      const user = await manager.save(UserEntity, {
         name: name.toLowerCase().trim(),
         email: email.toLowerCase().trim(),
         password,
         cpf,
       });
 
+      const calls = callbacks.map((callback) => callback(user, manager));
+      await Promise.all(calls);
+
+      await queryRunner.commitTransaction();
       return user;
     } catch (error) {
       console.log(error);
+      await queryRunner.rollbackTransaction();
       throw AppException.internalServerError("Erro ao criar usuário.");
+    } finally {
+      await queryRunner.release();
     }
   }
 

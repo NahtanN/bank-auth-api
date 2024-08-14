@@ -11,7 +11,7 @@ export class OutboxEntity implements OutboxEntityInterface {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: "varchar", length: 255 })
+  @Column({ name: "event_type", type: "varchar", length: 255 })
   eventType: string;
 
   @Column({ type: "jsonb" })
@@ -20,6 +20,10 @@ export class OutboxEntity implements OutboxEntityInterface {
   @Column({ type: "varchar", length: 50, default: "pending" })
   status: string;
 
-  @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  @CreateDateColumn({
+    name: "created_at",
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP",
+  })
   createdAt: Date;
 }

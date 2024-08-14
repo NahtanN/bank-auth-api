@@ -5,6 +5,7 @@ import { AuthenticationModule } from "./modules/authentication/authentication.mo
 import { UserModule } from "./modules/user/user.module";
 import { APP_FILTER } from "@nestjs/core";
 import HttpExceptionFilter from "./filters/exception.filter";
+import { OutboxModule } from "./modules/outbox/outbox.module";
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import HttpExceptionFilter from "./filters/exception.filter";
     TypeOrmDatabaseModule,
     AuthenticationModule,
     UserModule,
+    OutboxModule,
   ],
   controllers: [],
   providers: [
