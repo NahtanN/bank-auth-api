@@ -11,6 +11,8 @@ import { isCpf } from "src/@shared/utils/is_cpf.utils";
 @ValidatorConstraint({ name: "IsCpf", async: false })
 export class IsCpfConstraint implements ValidatorConstraintInterface {
   validate(cpf: any, args: ValidationArguments) {
+    if (!cpf) return false;
+
     return isCpf(cpf);
   }
 }

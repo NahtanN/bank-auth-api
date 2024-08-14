@@ -11,6 +11,8 @@ import { isCpf } from "src/@shared/utils/is_cpf.utils";
 @ValidatorConstraint({ name: "IsEmailOrCpf", async: false })
 export class IsEmailOrCpfConstraint implements ValidatorConstraintInterface {
   validate(login: any, args: ValidationArguments) {
+    if (!login) return false;
+
     const email = isEmail(login);
     const cpf = isCpf(login);
     return email || cpf;

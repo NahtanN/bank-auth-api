@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Post } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Post } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { SignInAuthenticationDocs } from "src/application/docs/authentication/sign_in.authentication.docs";
 import { SignUpAuthenticationDocs } from "src/application/docs/authentication/sign_up.authentication.docs";
@@ -12,7 +12,7 @@ import { SignUpDto } from "./dtos/sign_up.dto";
 
 @ApiTags("authentication")
 @Controller({
-  path: "authentication",
+  path: "",
   version: "1",
 })
 export class AuthenticationController {

@@ -49,6 +49,9 @@ export class SignUpDto implements SignUpRequestInterface {
   @ApiProperty({
     default: "123.456.789-09",
   })
+  @IsNotEmpty({
+    message: "O campo `cpf` não deve ser vazio.",
+  })
   @IsCpf({
     message: "O campo `cpf` deve ser um CPF válido.",
   })
