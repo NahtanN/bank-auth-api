@@ -12,5 +12,10 @@ declare namespace NodeJS {
     JWT_SECRET: string;
     MAX_USER_CONTRACTORS: number;
     JWT_ISSUER: string;
+    RABBITMQ_HOST: string;
+    RABBITMQ_USER: string;
+    RABBITMQ_PASS: string;
+    RABBITMQ_PORT: number;
+    RABBITMQ_VHOST: string;
   }
 }
