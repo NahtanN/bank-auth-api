@@ -46,7 +46,6 @@ export class UserTypeormRepository implements UserRepositoryInterface {
       await queryRunner.commitTransaction();
       return user;
     } catch (error) {
-      console.log(error);
       await queryRunner.rollbackTransaction();
       throw AppException.internalServerError("Erro ao criar usuário.");
     } finally {

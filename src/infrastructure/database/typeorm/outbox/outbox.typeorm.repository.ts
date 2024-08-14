@@ -26,10 +26,17 @@ export class OutboxTypeormRepository implements OutboxRepositoryInterface {
   }
 
   async findUnprocessed(): Promise<OutboxEntity[]> {
+    const query = `UPDATE outbox SET status = '${OutboxStatus.PROCESSING}' WHERE status = '${OutboxStatus.PENDING}' RETURNING *`;
+
     try {
-      return this.outboxRepository.find({
-        where: { status: OutboxStatus.PENDING },
-      });
+      const [result] = await this.outboxRepository.query(query);
+      return result.map((row) =>
+        this.outboxRepository.create({
+          ...row,
+          eventType: row.event_type,
+          createdAt: row.created_at,
+        }),
+      );
     } catch (error) {
       throw AppException.internalServerError(
         "Falha ao buscar eventos pendentes.",
