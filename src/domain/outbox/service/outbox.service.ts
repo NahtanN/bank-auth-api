@@ -33,9 +33,6 @@ export class OutboxService implements OutboxServiceInterface {
       },
       (error) => {
         this.outboxRepository.markAsFailed(event.id);
-        throw AppException.internalServerError(
-          "Não foi possível emitir o evento.",
-        );
       },
     );
   }

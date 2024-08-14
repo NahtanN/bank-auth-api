@@ -62,6 +62,8 @@ export default class AuthenticationService
             name: user.name,
             email: user.email,
             cpf: user.cpf,
+            createdAt: user.createdAt,
+            acceptedAt: user.acceptedAt,
           },
           transactionManager,
         ),
