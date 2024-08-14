@@ -11,5 +11,6 @@ declare namespace NodeJS {
     DATABASE_PORT: number;
     JWT_SECRET: string;
     MAX_USER_CONTRACTORS: number;
+    JWT_ISSUER: string;
   }
 }

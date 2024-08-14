@@ -11,9 +11,11 @@ import { UserModule } from "../user/user.module";
       signOptions: {
         expiresIn: "1d",
         algorithm: "HS384",
+        issuer: process.env.JWT_ISSUER,
       },
       verifyOptions: {
         algorithms: ["HS384"],
+        issuer: process.env.JWT_ISSUER,
       },
     }),
     UserModule,
