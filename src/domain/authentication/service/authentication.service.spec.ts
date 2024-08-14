@@ -5,11 +5,13 @@ import { SpecUtils } from "@shared/utils/spec.utils";
 import SignUpRequestInterface from "./dtos/request/sing_up.request.interface";
 import AppException from "@shared/exceptions.shared";
 import SignInRequestInterface from "./dtos/request/sign_in.request.interface";
+import { OutboxRepositoryInterface } from "@domain/outbox/repository/outbox.repository.interface";
 
 describe("AuthService", () => {
   let authService: AuthenticationService;
   let jwtServiceMock: jest.Mocked<JwtServiceInterface>;
   let userRepositoryMock: jest.Mocked<UserRepositoryInterface>;
+  let outboxRepositoryMock: jest.Mocked<OutboxRepositoryInterface>;
 
   const specUtils = new SpecUtils();
 
@@ -17,8 +19,14 @@ describe("AuthService", () => {
     jwtServiceMock = specUtils.jwtService() as jest.Mocked<JwtServiceInterface>;
     userRepositoryMock =
       specUtils.userRepository() as jest.Mocked<UserRepositoryInterface>;
+    outboxRepositoryMock =
+      specUtils.outboxRepository() as jest.Mocked<OutboxRepositoryInterface>;
 
-    authService = new AuthenticationService(jwtServiceMock, userRepositoryMock);
+    authService = new AuthenticationService(
+      jwtServiceMock,
+      userRepositoryMock,
+      outboxRepositoryMock,
+    );
   });
 
   afterEach(() => {
@@ -64,6 +72,7 @@ describe("AuthService", () => {
         dto.email,
         expect.any(String),
         dto.cpf,
+        expect.any(Function),
       );
     });
 
