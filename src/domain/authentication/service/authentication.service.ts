@@ -57,14 +57,7 @@ export default class AuthenticationService
   }
 
   async signIn(dto: SignInRequestInterface): Promise<SignInResponseInterface> {
-    let user: UserEntityInterface | null;
-    try {
-      user = await this.userRepository.findByEmail(dto.login);
-    } catch (error) {
-      throw AppException.internalServerError(
-        "Não foi possível procurar o usuário.",
-      );
-    }
+    const user = await this.userRepository.find(dto.login);
     if (!user) {
       throw AppException.badRequest("Usuário ou senha inválidos.");
     }

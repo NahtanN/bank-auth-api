@@ -15,8 +15,8 @@ export class UserTypeormRepository implements UserRepositoryInterface {
   ): Promise<UserEntityInterface> {
     try {
       const user = await this.userRepository.save({
-        name,
-        email,
+        name: name.toLowerCase().trim(),
+        email: name.toLowerCase().trim(),
         password,
         cpf,
       });
@@ -58,7 +58,17 @@ export class UserTypeormRepository implements UserRepositoryInterface {
     }
   }
 
-  findByEmail(email: string): Promise<UserEntityInterface | null> {
-    throw new Error("Method not implemented.");
+  async find(value: string): Promise<UserEntityInterface | null> {
+    value = value.trim().toLowerCase();
+
+    try {
+      return this.userRepository.findOne({
+        where: [{ email: value }, { cpf: value }],
+      });
+    } catch (error) {
+      throw AppException.internalServerError(
+        "Erro ao buscar usuário por email.",
+      );
+    }
   }
 }

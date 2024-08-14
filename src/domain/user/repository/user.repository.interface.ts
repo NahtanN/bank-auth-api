@@ -29,10 +29,10 @@ export default interface UserRepositoryInterface {
   ): Promise<UserEntityInterface>;
 
   /**
-   * Return a UserEntity if `email` is located on `users` table. If not, returns null.
-   * @param email - string
+   * Return a UserEntity if `email` or `cpf` is located on `users` table. If not, returns null.
+   * @param value - string
    * @returns UserEntity | null
    * @throws ApiError
    * */
-  findByEmail(email: string): Promise<UserEntityInterface | null>;
+  find(value: string): Promise<UserEntityInterface | null>;
 }

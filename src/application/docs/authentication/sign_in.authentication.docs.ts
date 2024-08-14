@@ -9,6 +9,7 @@ export function SignInAuthenticationDocs() {
   return applyDecorators(
     ApiOperation({
       summary: "Logar com usuário.",
+      description: "O campo `login` pode ser o email ou o CPF do usuário.",
     }),
     ApiResponse({
       status: 201,

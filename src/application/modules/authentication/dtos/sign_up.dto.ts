@@ -46,6 +46,9 @@ export class SignUpDto implements SignUpRequestInterface {
   })
   confirmPassword: string;
 
+  @ApiProperty({
+    default: "123.456.789-09",
+  })
   @IsCpf({
     message: "O campo `cpf` deve ser um CPF válido.",
   })
