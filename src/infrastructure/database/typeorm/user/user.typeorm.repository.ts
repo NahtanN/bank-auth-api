@@ -14,7 +14,7 @@ export class UserTypeormRepository implements UserRepositoryInterface {
     cpf: string,
   ): Promise<UserEntityInterface> {
     try {
-      const user = await this.userRepository.create({
+      const user = await this.userRepository.save({
         name,
         email,
         password,
@@ -22,17 +22,20 @@ export class UserTypeormRepository implements UserRepositoryInterface {
       });
 
       return user;
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      throw AppException.internalServerError("Erro ao criar usuário.");
+    }
   }
 
   async existsByEmail(email: string): Promise<boolean> {
     try {
-      const result = await this.userRepository.query(
+      const [result]: [{ exists: boolean }] = await this.userRepository.query(
         `SELECT EXISTS(SELECT 1 FROM users WHERE email LIKE LOWER(TRIM($1)) AND deleted_at IS NULL)`,
         [email],
       );
 
-      return true;
+      return result.exists;
     } catch (error) {
       throw AppException.internalServerError(
         "Erro ao verificar existência do email.",
@@ -42,12 +45,12 @@ export class UserTypeormRepository implements UserRepositoryInterface {
 
   async existsByCpf(cpf: string): Promise<boolean> {
     try {
-      const result = await this.userRepository.query(
+      const [result]: [{ exists: boolean }] = await this.userRepository.query(
         `SELECT EXISTS(SELECT 1 FROM users WHERE cpf LIKE LOWER(TRIM($1)) AND deleted_at IS NULL)`,
         [cpf],
       );
 
-      return true;
+      return result.exists;
     } catch (error) {
       throw AppException.internalServerError(
         "Erro ao verificar existência do CPF.",

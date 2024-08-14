@@ -33,7 +33,11 @@ export class UserEntity implements UserEntityInterface {
   @Column({ type: "varchar" })
   cpf: string;
 
-  @Column({ type: "timestamptz", default: () => "CURRENT_TIMESTAMP" })
+  @Column({
+    name: "accepted_at",
+    type: "timestamptz",
+    default: () => "CURRENT_TIMESTAMP",
+  })
   acceptedAt: Date;
 
   @CreateDateColumn({

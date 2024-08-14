@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsNotEmpty, Validate } from "class-validator";
+import { IsCpf } from "src/application/constraints/is_cpf.constaint";
 import { MatchPasswords } from "src/application/constraints/match_password.constraint";
 import SignUpRequestInterface from "src/domain/authentication/service/dtos/request/sing_up.request.interface";
 
@@ -45,5 +46,8 @@ export class SignUpDto implements SignUpRequestInterface {
   })
   confirmPassword: string;
 
+  @IsCpf({
+    message: "O campo `cpf` deve ser um CPF válido.",
+  })
   cpf: string;
 }

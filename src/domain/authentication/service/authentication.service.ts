@@ -18,6 +18,8 @@ export default class AuthenticationService
   ) {}
 
   async signUp(dto: SignUpRequestInterface): Promise<DefaultResponseInterface> {
+    dto.cpf = dto.cpf.replace(/[^0-9]/g, "");
+
     const errorMessages = [];
 
     const emailAlreadyInUse = await this.userRepository.existsByEmail(
