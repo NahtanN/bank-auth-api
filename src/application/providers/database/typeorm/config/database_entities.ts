@@ -1,3 +1,4 @@
-import { UserEntity } from "src/infrastructure/database/typeorm/user/user.typorm.entity";
+import { OutboxEntity } from "@infrastructure/database/typeorm/outbox/outbox.typeorm.entity";
+import { UserEntity } from "@infrastructure/database/typeorm/user/user.typeorm.entity";
 
-export const entities = [UserEntity];
+export const entities = [UserEntity, OutboxEntity];

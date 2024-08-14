@@ -12,7 +12,6 @@ import { SignUpDto } from "./dtos/sign_up.dto";
 
 @ApiTags("authentication")
 @Controller({
-  path: "",
   version: "1",
 })
 export class AuthenticationController {

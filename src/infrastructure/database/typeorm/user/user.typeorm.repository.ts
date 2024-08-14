@@ -1,8 +1,8 @@
 import UserEntityInterface from "src/domain/user/entity/user.entity.interface";
 import UserRepositoryInterface from "src/domain/user/repository/user.repository.interface";
 import { Repository } from "typeorm";
-import { UserEntity } from "./user.typorm.entity";
 import AppException from "src/@shared/exceptions.shared";
+import { UserEntity } from "./user.typeorm.entity";
 
 export class UserTypeormRepository implements UserRepositoryInterface {
   constructor(private readonly userRepository: Repository<UserEntity>) {}
@@ -16,7 +16,7 @@ export class UserTypeormRepository implements UserRepositoryInterface {
     try {
       const user = await this.userRepository.save({
         name: name.toLowerCase().trim(),
-        email: name.toLowerCase().trim(),
+        email: email.toLowerCase().trim(),
         password,
         cpf,
       });
