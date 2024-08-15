@@ -20,3 +20,21 @@ services:
       - ./kong:/etc/kong/
     extra_hosts:
       - host.docker.internal:host-gateway
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: root
+      RABBITMQ_DEFAULT_PASS: root
+      RABBITMQ_PORT: 5672
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_DEFAULT_VHOST: vhost
+    ports:
+      - 5672:5672
+      - "15672:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
+volumes:
+  rabbitmq-data:
