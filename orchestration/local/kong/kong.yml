@@ -1,0 +1,32 @@
+_format_version: "2.1"
+services:
+  - name: authentication-api
+    url: http://host.docker.internal:4001/api/v1
+    routes:
+      - name: auth
+        paths:
+          - /auth
+  - name: user-api
+    url: http://host.docker.internal:4003
+    routes:
+      - name: user
+        paths:
+          - /user
+
+plugins:
+  - name: jwt
+    service: user-api
+    config:
+      uri_param_names:
+        - jwt
+      claims_to_verify:
+        - exp
+      header_names:
+        - Authorization
+
+consumers:
+  - username: user
+    jwt_secrets:
+      - key: super-secret-key
+        secret: super-secret
+        algorithm: HS384

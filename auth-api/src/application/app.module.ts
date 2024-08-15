@@ -26,4 +26,4 @@ import { RabbitmqModule } from "./providers/rabbitmq/rabbitmq.module";
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }
