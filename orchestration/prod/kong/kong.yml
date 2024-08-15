@@ -27,6 +27,6 @@ plugins:
 consumers:
   - username: user
     jwt_secrets:
-      - key: super-secret-key
-        secret: super-secret
+      - key: ${JWT_ISSUER}
+        secret: ${JWT_SECRET}
         algorithm: HS384
