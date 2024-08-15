@@ -14,8 +14,6 @@ services:
       - "8443:8443" # Kong proxy SSL port
       - "8001:8001" # Kong admin API port
       - "8444:8444" # Kong admin API SSL port
-    depends_on:
-      - kong-migrations
     volumes:
       - ./kong:/etc/kong/
     extra_hosts:
