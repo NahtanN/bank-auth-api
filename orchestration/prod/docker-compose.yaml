@@ -46,9 +46,10 @@ services:
       - auth-api-database-data:/var/lib/postgresql/data
 
   auth-api:
-    build:
-      context: ../../auth-api/
-      dockerfile: Dockerfile
+    #build:
+    #context: ../../auth-api/
+    #dockerfile: Dockerfile
+    image: nahtann/loomi-bank-auth-api:latest
     ports:
       - "4001:4001"
     environment:
