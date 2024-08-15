@@ -8,14 +8,11 @@ services:
       KONG_PROXY_ERROR_LOG: /dev/stderr
       KONG_ADMIN_ERROR_LOG: /dev/stderr
       KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
-      KONG_DECLARATIVE_CONFIG: /etc/kong/kong.yml
     ports:
       - "8004:8000" # Kong proxy port
       - "8443:8443" # Kong proxy SSL port
       - "8001:8001" # Kong admin API port
       - "8444:8444" # Kong admin API SSL port
-    volumes:
-      - ./kong:/etc/kong/
     extra_hosts:
       - host.docker.internal:host-gateway
 
