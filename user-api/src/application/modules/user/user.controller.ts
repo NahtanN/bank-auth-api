@@ -1,5 +1,7 @@
 import { UserServiceInterface } from "@domain/user/service/user.service.interface";
 import { Controller, Get, Inject, Param, Patch } from "@nestjs/common";
+import { Ctx, EventPattern, Payload } from "@nestjs/microservices";
+import { AppEvents } from "@shared/events.shared";
 
 @Controller({
   version: "1",
@@ -18,4 +20,14 @@ export class UserController {
 
   @Patch(":id/profile-picture")
   async updateProfilePicture(@Param("id") id: string) { }
+
+  @EventPattern(AppEvents.USER_CREATED)
+  async handleUserCreated(@Payload() data: any, @Ctx() context: any) {
+    const channel = context.getChannelRef();
+    try {
+      channel.ack(context.getMessage());
+    } catch (error) {
+      channel.nack(context.getMessage());
+    }
+  }
 }
