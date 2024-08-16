@@ -1,6 +1,6 @@
 services:
   database:
-    container_name: bank-api-database
+    container_name: auth-api-database
     image: "postgres:latest"
     ports:
       - 54321:5432

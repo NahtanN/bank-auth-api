@@ -24,10 +24,6 @@ exports.up = (pgm) => {
       notNull: true,
       unique: true,
     },
-    password: {
-      type: "varchar(200)",
-      notNull: true,
-    },
     cpf: {
       type: "varchar",
       notNull: true,
