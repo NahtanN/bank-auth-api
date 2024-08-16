@@ -69,7 +69,13 @@ export class UserTypeormRepository implements UserRepositoryInterface {
 
     try {
       return this.userRepository.findOne({
-        where: [{ email: value }, { cpf: value }],
+        where: {
+          userId: value,
+        },
+        relations: {
+          bankingDetails: true,
+          addresses: true,
+        },
       });
     } catch (error) {
       throw AppException.internalServerError(

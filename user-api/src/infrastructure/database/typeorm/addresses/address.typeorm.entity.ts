@@ -38,7 +38,7 @@ export class AddressEntity implements AddressEntityInterface {
   @Column({ type: "varchar", length: 100, nullable: true })
   complement: string;
 
-  @Column({ type: "uuid" })
+  @Column({ type: "uuid", name: "created_by" })
   createdBy: string;
 
   @ManyToOne(() => UserEntity)

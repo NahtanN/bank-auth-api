@@ -7,7 +7,7 @@ services:
         paths:
           - /auth
   - name: user-api
-    url: http://host.docker.internal:4003
+    url: http://host.docker.internal:4002/api/v1
     routes:
       - name: user
         paths:
