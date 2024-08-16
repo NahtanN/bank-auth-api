@@ -3,7 +3,6 @@ import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { OutboxRepository } from "./repository/outbox.repository";
 import { AppOutboxService } from "./outbox.service";
-import { RabbitmqModule } from "src/application/providers/rabbitmq/rabbitmq.module";
 import { ClientsModule } from "@nestjs/microservices";
 import { userCreatedQueue } from "src/application/providers/rabbitmq/config/connections";
 
@@ -16,4 +15,4 @@ import { userCreatedQueue } from "src/application/providers/rabbitmq/config/conn
   controllers: [],
   exports: [OutboxRepository],
 })
-export class OutboxModule {}
+export class OutboxModule { }

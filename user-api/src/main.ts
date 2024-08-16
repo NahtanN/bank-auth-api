@@ -3,10 +3,14 @@ import { AppModule } from "./application/app.module";
 import { Logger, ValidationPipe, VersioningType } from "@nestjs/common";
 import * as morgan from "morgan";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { MicroserviceOptions, Transport } from "@nestjs/microservices";
+import { userCreatedQueue } from "./application/providers/rabbitmq/config/connections";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const prefix = "api";
+
+  app.connectMicroservice<MicroserviceOptions>(userCreatedQueue);
 
   app.enableCors();
   app.setGlobalPrefix(prefix);
@@ -33,6 +37,7 @@ async function bootstrap() {
     `Swagger docs running on ${process.env.APP_URL}:${process.env.PORT}/docs`,
   );
 
+  await app.startAllMicroservices();
   await app.listen(process.env.PORT, () =>
     Logger.log(
       `Application running on ${process.env.APP_URL}:${process.env.PORT}/${prefix}`,

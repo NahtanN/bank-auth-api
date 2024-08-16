@@ -7,7 +7,6 @@ import { APP_FILTER } from "@nestjs/core";
 import HttpExceptionFilter from "./filters/exception.filter";
 import { OutboxModule } from "./modules/outbox/outbox.module";
 import { ScheduleModule } from "@nestjs/schedule";
-import { RabbitmqModule } from "./providers/rabbitmq/rabbitmq.module";
 
 @Module({
   imports: [

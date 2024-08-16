@@ -16,7 +16,6 @@ export class SpecUtils {
       userId: randomUUID(),
       name: "Foo Bar",
       email: "foo@bar.com",
-      password: "password",
       cpf: "12345678901",
       acceptedAt: new Date(),
       createdAt: new Date(),
