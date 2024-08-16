@@ -23,61 +23,43 @@ export class UserTypeormRepository implements UserRepositoryInterface {
   }
 
   async create(
+    userId: string,
     name: string,
     email: string,
     cpf: string,
+    acceptedAt: Date,
+    createdAt: Date,
     ...callbacks: CreateUserCallback[]
-  ): Promise<UserEntityInterface> {
+  ): Promise<void> {
     const { queryRunner, manager } = await this.getTransactionManager();
 
     try {
       await queryRunner.startTransaction();
+
       const user = await manager.save(UserEntity, {
+        userId,
         name: name.toLowerCase().trim(),
         email: email.toLowerCase().trim(),
         cpf,
+        acceptedAt,
+        createdAt,
+        bankingDetails: [
+          {
+            agency: "0001",
+            account: Math.floor(1000000 + Math.random() * 9000000).toString(),
+          },
+        ],
       });
 
       const calls = callbacks.map((callback) => callback(user, manager));
       await Promise.all(calls);
 
       await queryRunner.commitTransaction();
-      return user;
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw AppException.internalServerError("Erro ao criar usuário.");
     } finally {
       await queryRunner.release();
-    }
-  }
-
-  async existsByEmail(email: string): Promise<boolean> {
-    try {
-      const [result]: [{ exists: boolean }] = await this.userRepository.query(
-        `SELECT EXISTS(SELECT 1 FROM users WHERE email LIKE LOWER(TRIM($1)) AND deleted_at IS NULL)`,
-        [email],
-      );
-
-      return result.exists;
-    } catch (error) {
-      throw AppException.internalServerError(
-        "Erro ao verificar existência do email.",
-      );
-    }
-  }
-
-  async existsByCpf(cpf: string): Promise<boolean> {
-    try {
-      const [result]: [{ exists: boolean }] = await this.userRepository.query(
-        `SELECT EXISTS(SELECT 1 FROM users WHERE cpf LIKE LOWER(TRIM($1)) AND deleted_at IS NULL)`,
-        [cpf],
-      );
-
-      return result.exists;
-    } catch (error) {
-      throw AppException.internalServerError(
-        "Erro ao verificar existência do CPF.",
-      );
     }
   }
 

@@ -24,7 +24,7 @@ export class BankingDetailsEntity implements BankingDetailsEntityInterface {
   @Column({ type: "int", default: 0 })
   balance: number;
 
-  @Column({ type: "uuid" })
+  @Column({ type: "uuid", name: "user_id" })
   userId: string;
 
   @ManyToOne(() => UserEntity)

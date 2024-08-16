@@ -10,11 +10,14 @@ export default interface UserRepositoryInterface {
    * @throws ApiError
    * */
   create(
+    userId: string,
     name: string,
     email: string,
     cpf: string,
+    acceptedAt: Date,
+    createdAt: Date,
     ...callbacks: CreateUserCallback[]
-  ): Promise<UserEntityInterface>;
+  ): Promise<void>;
 
   /**
    * Return a UserEntity if `email` or `cpf` is located on `users` table. If not, returns null.

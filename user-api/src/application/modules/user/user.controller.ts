@@ -25,6 +25,7 @@ export class UserController {
   async handleUserCreated(@Payload() data: any, @Ctx() context: any) {
     const channel = context.getChannelRef();
     try {
+      await this.service.createUser(data);
       channel.ack(context.getMessage());
     } catch (error) {
       channel.nack(context.getMessage());

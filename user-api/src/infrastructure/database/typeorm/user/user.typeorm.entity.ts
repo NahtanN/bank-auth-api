@@ -6,10 +6,12 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { AddressEntity } from "../addresses/address.typeorm.entity";
+import { BankingDetailsEntity } from "../banking_details/banking_details.typeorm.entity";
 
 @Entity("users")
 export class UserEntity implements UserEntityInterface {
@@ -67,4 +69,13 @@ export class UserEntity implements UserEntityInterface {
     },
   })
   addresses: AddressEntity[];
+
+  @OneToMany(
+    () => BankingDetailsEntity,
+    (bankingDetails) => bankingDetails.user,
+    {
+      cascade: true,
+    },
+  )
+  bankingDetails: BankingDetailsEntity[];
 }
