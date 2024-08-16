@@ -24,12 +24,6 @@ export class UserEntity implements UserEntityInterface {
   })
   email: string;
 
-  @Column({
-    type: "varchar",
-    length: 200,
-  })
-  password: string;
-
   @Column({ type: "varchar" })
   cpf: string;
 
