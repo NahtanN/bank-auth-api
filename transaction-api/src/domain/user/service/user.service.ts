@@ -16,12 +16,6 @@ export class UserService implements UserServiceInterface {
       payload.userId,
       payload.name,
       payload.createdAt,
-      async (user, transactionManager) =>
-        this.outboxRepository.create(
-          AppEvents.BANKING_DETAILS_CREATED,
-          { ...user.bankingDetails[0] },
-          transactionManager,
-        ),
     );
   }
 

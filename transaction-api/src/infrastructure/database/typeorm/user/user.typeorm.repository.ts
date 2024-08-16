@@ -37,7 +37,6 @@ export class UserTypeormRepository implements UserRepositoryInterface {
         userId,
         name: name.toLowerCase().trim(),
         createdAt,
-        bankingDetails: [{}],
       });
 
       const calls = callbacks.map((callback) => callback(user, manager));
