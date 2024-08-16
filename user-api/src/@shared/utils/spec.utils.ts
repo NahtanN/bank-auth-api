@@ -36,8 +36,6 @@ export class SpecUtils {
 
   userRepository(): UserRepositoryInterface {
     return {
-      existsByEmail: jest.fn(),
-      existsByCpf: jest.fn(),
       find: jest.fn(),
       create: jest.fn(),
     };

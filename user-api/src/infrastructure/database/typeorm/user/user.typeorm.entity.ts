@@ -4,9 +4,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { AddressEntity } from "../addresses/address.typeorm.entity";
 
 @Entity("users")
 export class UserEntity implements UserEntityInterface {
@@ -50,4 +53,18 @@ export class UserEntity implements UserEntityInterface {
 
   @DeleteDateColumn({ name: "deleted_at", type: "timestamptz", nullable: true })
   deletedAt?: Date;
+
+  @ManyToMany(() => AddressEntity, (address) => address.users)
+  @JoinTable({
+    name: "user_addresses",
+    joinColumn: {
+      name: "user_id",
+      referencedColumnName: "userId",
+    },
+    inverseJoinColumn: {
+      name: "address_id",
+      referencedColumnName: "addressId",
+    },
+  })
+  addresses: AddressEntity[];
 }

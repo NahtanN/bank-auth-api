@@ -10,7 +10,7 @@ export class UserTypeormRepository implements UserRepositoryInterface {
   constructor(
     private readonly dataSource: DataSource,
     private readonly userRepository: Repository<UserEntity>,
-  ) {}
+  ) { }
 
   async getTransactionManager() {
     const queryRunner = this.dataSource.createQueryRunner();
@@ -25,7 +25,6 @@ export class UserTypeormRepository implements UserRepositoryInterface {
   async create(
     name: string,
     email: string,
-    password: string,
     cpf: string,
     ...callbacks: CreateUserCallback[]
   ): Promise<UserEntityInterface> {
@@ -36,7 +35,6 @@ export class UserTypeormRepository implements UserRepositoryInterface {
       const user = await manager.save(UserEntity, {
         name: name.toLowerCase().trim(),
         email: email.toLowerCase().trim(),
-        password,
         cpf,
       });
 
