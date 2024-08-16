@@ -25,9 +25,6 @@ export class UserTypeormRepository implements UserRepositoryInterface {
   async create(
     userId: string,
     name: string,
-    email: string,
-    cpf: string,
-    acceptedAt: Date,
     createdAt: Date,
     ...callbacks: CreateUserCallback[]
   ): Promise<void> {
@@ -39,16 +36,8 @@ export class UserTypeormRepository implements UserRepositoryInterface {
       const user = await manager.save(UserEntity, {
         userId,
         name: name.toLowerCase().trim(),
-        email: email.toLowerCase().trim(),
-        cpf,
-        acceptedAt,
         createdAt,
-        bankingDetails: [
-          {
-            agency: "0001",
-            account: Math.floor(1000000 + Math.random() * 9000000).toString(),
-          },
-        ],
+        bankingDetails: [{}],
       });
 
       const calls = callbacks.map((callback) => callback(user, manager));
@@ -74,7 +63,6 @@ export class UserTypeormRepository implements UserRepositoryInterface {
         },
         relations: {
           bankingDetails: true,
-          addresses: true,
         },
       });
     } catch (error) {

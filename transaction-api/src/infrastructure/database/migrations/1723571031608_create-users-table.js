@@ -19,21 +19,6 @@ exports.up = (pgm) => {
       type: "varchar(255)",
       notNull: true,
     },
-    email: {
-      type: "varchar(100)",
-      notNull: true,
-      unique: true,
-    },
-    cpf: {
-      type: "varchar",
-      notNull: true,
-      unique: true,
-    },
-    accepted_at: {
-      type: "timestamp with time zone",
-      notNull: true,
-      default: pgm.func("(current_timestamp at time zone 'utc')"),
-    },
     created_at: {
       type: "timestamp with time zone",
       notNull: true,

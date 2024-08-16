@@ -15,8 +15,6 @@ exports.up = (pgm) => {
       default: pgm.func("gen_random_uuid()"),
       primaryKey: true,
     },
-    account: { type: "varchar", notNull: true },
-    agency: { type: "varchar", notNull: true },
     balance: { type: "int", default: 0 },
     user_id: {
       type: "uuid",

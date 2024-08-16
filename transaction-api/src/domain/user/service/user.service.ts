@@ -15,9 +15,6 @@ export class UserService implements UserServiceInterface {
     return this.userRepository.create(
       payload.userId,
       payload.name,
-      payload.email,
-      payload.cpf,
-      payload.acceptedAt,
       payload.createdAt,
       async (user, transactionManager) =>
         this.outboxRepository.create(

@@ -15,9 +15,6 @@ export class SpecUtils {
     return {
       userId: randomUUID(),
       name: "Foo Bar",
-      email: "foo@bar.com",
-      cpf: "12345678901",
-      acceptedAt: new Date(),
       createdAt: new Date(),
       updatedAt: new Date(),
       deletedAt: null,

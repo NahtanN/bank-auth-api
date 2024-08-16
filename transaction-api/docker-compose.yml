@@ -1,6 +1,6 @@
 services:
   database:
-    container_name: user-api-database
+    container_name: transaction-api-database
     image: "postgres:latest"
     ports:
       - 54323:5432

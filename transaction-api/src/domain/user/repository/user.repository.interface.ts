@@ -12,9 +12,6 @@ export default interface UserRepositoryInterface {
   create(
     userId: string,
     name: string,
-    email: string,
-    cpf: string,
-    acceptedAt: Date,
     createdAt: Date,
     ...callbacks: CreateUserCallback[]
   ): Promise<void>;

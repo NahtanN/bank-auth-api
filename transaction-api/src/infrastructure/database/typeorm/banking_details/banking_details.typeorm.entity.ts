@@ -15,12 +15,6 @@ export class BankingDetailsEntity implements BankingDetailsEntityInterface {
   @PrimaryGeneratedColumn("uuid", { name: "banking_details_id" })
   bankingDetailsId: string;
 
-  @Column({ type: "varchar" })
-  account: string;
-
-  @Column({ type: "varchar" })
-  agency: string;
-
   @Column({ type: "int", default: 0 })
   balance: number;
 
