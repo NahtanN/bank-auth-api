@@ -1,3 +1,5 @@
+import { BankingDetailsEntityInterface } from "@domain/banking_details/entity/banking_details.entity.interface";
+
 export default interface UserEntityInterface {
   userId: string;
   name: string;
@@ -7,4 +9,5 @@ export default interface UserEntityInterface {
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
+  bankingDetails?: BankingDetailsEntityInterface[];
 }

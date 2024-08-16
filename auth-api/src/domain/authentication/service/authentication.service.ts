@@ -14,13 +14,12 @@ import { query } from "express";
 import { AppEvents } from "@shared/events.shared";
 
 export default class AuthenticationService
-  implements AuthenticationServiceInterface
-{
+  implements AuthenticationServiceInterface {
   constructor(
     private readonly jwtService: JwtServiceInterface,
     private readonly userRepository: UserRepositoryInterface,
     private readonly outboxRepository: OutboxRepositoryInterface,
-  ) {}
+  ) { }
 
   async signUp(dto: SignUpRequestInterface): Promise<DefaultResponseInterface> {
     dto.cpf = dto.cpf.replace(/[^0-9]/g, "");

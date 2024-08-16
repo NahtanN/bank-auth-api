@@ -4,13 +4,13 @@ import { Logger, ValidationPipe, VersioningType } from "@nestjs/common";
 import * as morgan from "morgan";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { MicroserviceOptions, Transport } from "@nestjs/microservices";
-import { userCreatedQueue } from "./application/providers/rabbitmq/config/connections";
+import { userConsumerQueue } from "./application/providers/rabbitmq/config/connections";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const prefix = "api";
 
-  app.connectMicroservice<MicroserviceOptions>(userCreatedQueue);
+  app.connectMicroservice<MicroserviceOptions>(userConsumerQueue);
 
   app.enableCors();
   app.setGlobalPrefix(prefix);
