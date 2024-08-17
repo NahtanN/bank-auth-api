@@ -38,6 +38,7 @@ export class SpecUtils {
     return {
       find: jest.fn(),
       create: jest.fn(),
+      update: jest.fn(),
     };
   }
 

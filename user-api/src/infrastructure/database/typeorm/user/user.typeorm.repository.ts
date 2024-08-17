@@ -5,6 +5,7 @@ import UserRepositoryInterface, {
 import { DataSource, getManager, Repository } from "typeorm";
 import AppException from "src/@shared/exceptions.shared";
 import { UserEntity } from "./user.typeorm.entity";
+import { UpdateUserRequestInterface } from "@domain/user/service/dtos/request/update_user.request.interface";
 
 export class UserTypeormRepository implements UserRepositoryInterface {
   constructor(
@@ -73,13 +74,61 @@ export class UserTypeormRepository implements UserRepositoryInterface {
         },
         relations: {
           bankingDetails: true,
-          addresses: true,
+          address: true,
         },
       });
     } catch (error) {
       throw AppException.internalServerError(
         "Erro ao buscar usuário por email.",
       );
+    }
+  }
+
+  async existsByEmail(email: string): Promise<boolean> {
+    try {
+      const [result]: [{ exists: boolean }] = await this.userRepository.query(
+        `SELECT EXISTS(SELECT 1 FROM users WHERE email LIKE LOWER(TRIM($1)) AND deleted_at IS NULL)`,
+        [email],
+      );
+
+      return result.exists;
+    } catch (error) {
+      throw AppException.internalServerError(
+        "Erro ao verificar existência do email.",
+      );
+    }
+  }
+
+  async update(
+    id: string,
+    data: UpdateUserRequestInterface,
+  ): Promise<UserEntityInterface> {
+    let emailExists: boolean;
+    try {
+      const [result]: [{ exists: boolean }] = await this.userRepository.query(
+        `SELECT EXISTS(SELECT 1 FROM users WHERE email LIKE LOWER(TRIM($1)) AND deleted_at IS NULL AND user_id != $2)`,
+        [data.email, id],
+      );
+      emailExists = result.exists;
+    } catch (error) {
+      throw AppException.internalServerError(
+        "Erro ao verificar existência do email.",
+      );
+    }
+
+    if (emailExists) {
+      throw AppException.badRequest("Email já cadastrado.");
+    }
+
+    try {
+      return this.userRepository.save({
+        userId: id,
+        name: data.name,
+        email: data.email,
+        address: [{ ...data.address, createdBy: id }],
+      });
+    } catch (error) {
+      throw AppException.internalServerError("Erro ao atualizar usuário.");
     }
   }
 }

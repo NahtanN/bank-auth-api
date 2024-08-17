@@ -66,6 +66,6 @@ export class AddressEntity implements AddressEntityInterface {
   })
   deletedAt?: Date;
 
-  @ManyToMany(() => UserEntity, (user) => user.addresses)
+  @ManyToMany(() => UserEntity, (user) => user.address)
   users: UserEntity[];
 }

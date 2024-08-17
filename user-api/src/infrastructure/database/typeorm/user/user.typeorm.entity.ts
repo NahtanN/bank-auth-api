@@ -56,7 +56,9 @@ export class UserEntity implements UserEntityInterface {
   @DeleteDateColumn({ name: "deleted_at", type: "timestamptz", nullable: true })
   deletedAt?: Date;
 
-  @ManyToMany(() => AddressEntity, (address) => address.users)
+  @ManyToMany(() => AddressEntity, (address) => address.users, {
+    cascade: true,
+  })
   @JoinTable({
     name: "user_addresses",
     joinColumn: {
@@ -68,7 +70,7 @@ export class UserEntity implements UserEntityInterface {
       referencedColumnName: "addressId",
     },
   })
-  addresses: AddressEntity[];
+  address: AddressEntity[];
 
   @OneToMany(
     () => BankingDetailsEntity,

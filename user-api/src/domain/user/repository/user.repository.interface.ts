@@ -1,4 +1,5 @@
 import UserEntityInterface from "../entity/user.entity.interface";
+import { UpdateUserRequestInterface } from "../service/dtos/request/update_user.request.interface";
 
 export default interface UserRepositoryInterface {
   /**
@@ -26,6 +27,11 @@ export default interface UserRepositoryInterface {
    * @throws ApiError
    * */
   find(value: string): Promise<UserEntityInterface | null>;
+
+  update(
+    id: string,
+    data: UpdateUserRequestInterface,
+  ): Promise<UserEntityInterface>;
 }
 
 export interface CreateUserCallback {

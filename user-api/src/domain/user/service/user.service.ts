@@ -4,6 +4,7 @@ import UserRepositoryInterface from "../repository/user.repository.interface";
 import { UserServiceInterface } from "./user.service.interface";
 import { BankingDetailsEntity } from "@infrastructure/database/typeorm/banking_details/banking_details.typeorm.entity";
 import { AppEvents } from "@shared/events.shared";
+import { UpdateUserRequestInterface } from "./dtos/request/update_user.request.interface";
 
 export class UserService implements UserServiceInterface {
   constructor(
@@ -32,9 +33,9 @@ export class UserService implements UserServiceInterface {
     return this.userRepository.find(id);
   }
 
-  /*async updateUser(id: string) {*/
-  /*return { id };*/
-  /*}*/
+  async updateUser(id: string, data: UpdateUserRequestInterface) {
+    return this.userRepository.update(id, data);
+  }
 
   /*async updateProfilePicture(id: string) {*/
   /*return { id };*/
