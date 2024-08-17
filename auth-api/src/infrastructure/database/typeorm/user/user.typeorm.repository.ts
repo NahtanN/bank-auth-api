@@ -99,14 +99,12 @@ export class UserTypeormRepository implements UserRepositoryInterface {
 
   async userUpdate(userId: string, name: string, email: string): Promise<void> {
     try {
-      console.log(userId, name, email);
       await this.userRepository.save({
         userId,
         name,
         email,
       });
     } catch (error) {
-      console.log(error);
       throw AppException.internalServerError("Erro ao atualizar usuário.");
     }
   }

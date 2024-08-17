@@ -22,4 +22,8 @@ export class UserService implements UserServiceInterface {
   async getUser(id: string): Promise<UserEntityInterface> {
     return this.userRepository.find(id);
   }
+
+  async updateUser(data: UserEntityInterface): Promise<void> {
+    await this.userRepository.userUpdate(data.userId, data.name);
+  }
 }

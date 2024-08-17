@@ -26,12 +26,25 @@ export class AppUserService extends UserService {
     routingKey: AppEvents.USER_CREATED,
     errorBehavior: MessageHandlerErrorBehavior.NACK,
   })
-  async handleMessage(message: any) {
+  async handleUserCreated(message: any) {
     try {
       await this.createUser(message);
       return new Nack();
     } catch (error) {
       Logger.error("Erro ao criar usuário", error);
+    }
+  }
+
+  @RabbitSubscribe({
+    exchange: BANK_EXCHANGE,
+    routingKey: AppEvents.USER_UPDATED,
+    errorBehavior: MessageHandlerErrorBehavior.ACK,
+  })
+  async handleUserUpdated(message: any) {
+    try {
+      await this.updateUser(message);
+    } catch (error) {
+      Logger.error("Erro ao atualizar o usuário.", error);
     }
   }
 }

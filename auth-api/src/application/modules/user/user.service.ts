@@ -21,7 +21,6 @@ export class AppUserService extends UserService {
   })
   async handleMessage(message: any) {
     try {
-      console.log("message");
       await this.updateUser(message);
     } catch (error) {
       Logger.error("Erro ao atualizar o usuário.", error);

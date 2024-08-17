@@ -121,8 +121,6 @@ export class UserTypeormRepository implements UserRepositoryInterface {
 
       await queryRunner.commitTransaction();
 
-      console.log(user);
-
       return user;
     } catch (error) {
       await queryRunner.rollbackTransaction();
