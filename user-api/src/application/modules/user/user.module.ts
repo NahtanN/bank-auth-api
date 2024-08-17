@@ -5,9 +5,10 @@ import { UserEntity } from "@infrastructure/database/typeorm/user/user.typeorm.e
 import { AppUserService } from "./user.service";
 import { UserController } from "./user.controller";
 import { OutboxModule } from "../outbox/outbox.module";
+import { RMQModule } from "src/application/providers/rabbitmq/rabbitmq.module";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity]), OutboxModule],
+  imports: [TypeOrmModule.forFeature([UserEntity]), OutboxModule, RMQModule],
   controllers: [UserController],
   providers: [
     UserRepository,

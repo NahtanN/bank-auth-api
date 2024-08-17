@@ -10,8 +10,6 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const prefix = "api";
 
-  /*  app.connectMicroservice<MicroserviceOptions>(userConsumerQueue);*/
-
   app.enableCors();
   app.setGlobalPrefix(prefix);
 
@@ -37,7 +35,6 @@ async function bootstrap() {
     `Swagger docs running on ${process.env.APP_URL}:${process.env.PORT}/docs`,
   );
 
-  await app.startAllMicroservices();
   await app.listen(process.env.PORT, () =>
     Logger.log(
       `Application running on ${process.env.APP_URL}:${process.env.PORT}/${prefix}`,

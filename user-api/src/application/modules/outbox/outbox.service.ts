@@ -1,5 +1,5 @@
 import { OutboxService } from "@domain/outbox/service/outbox.service";
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 import { Interval } from "@nestjs/schedule";
 import { OutboxRepository } from "./repository/outbox.repository";
 import { RabbitMQClients } from "src/application/providers/rabbitmq/config/clients";
@@ -25,6 +25,7 @@ export class AppOutboxService {
     errorBehavior: MessageHandlerErrorBehavior.ACK,
   })
   async handleMessage(message: any) {
+    Logger.log(`Email RMQ Payload:` + JSON.stringify(message));
     console.log(message);
     console.log(`Service 1 received message: ${message}`);
   }
