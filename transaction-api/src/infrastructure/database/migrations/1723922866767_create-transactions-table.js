@@ -16,10 +16,20 @@ exports.up = (pgm) => {
       notNull: true,
       references: "users(user_id)",
     },
+    user_sender_banking_details_id: {
+      type: "uuid",
+      notNull: true,
+      references: "banking_details(banking_details_id)",
+    },
     user_receiver_id: {
       type: "uuid",
       notNull: true,
       references: "users(user_id)",
+    },
+    user_receiver_banking_details_id: {
+      type: "uuid",
+      notNull: true,
+      references: "banking_details(banking_details_id)",
     },
     amount: { type: "int", notNull: true },
     description: { type: "varchar" },

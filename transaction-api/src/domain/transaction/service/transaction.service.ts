@@ -66,7 +66,32 @@ export class TransactionService implements TransactionServiceInterface {
       );
     }
 
-    await this.transactionRepository.transfer(userId, to, amount, description);
+    await this.transactionRepository.transfer(
+      userId,
+      to,
+      amount,
+      description,
+      async (transaction, transactionManager) =>
+        this.outboxRepository.create(
+          AppEvents.BAKING_DETAILS_UPDATED,
+          {
+            bankingDetailsId: transaction.userSenderBankingDetailsId,
+            userId: transaction.userSenderId,
+            balance: transaction.senderBalanceAfter,
+          },
+          transactionManager,
+        ),
+      async (transaction, transactionManager) =>
+        this.outboxRepository.create(
+          AppEvents.BAKING_DETAILS_UPDATED,
+          {
+            bankingDetailsId: transaction.userReceiverBankingDetailsId,
+            userId: transaction.userReceiverId,
+            balance: transaction.receiverBalanceAfter,
+          },
+          transactionManager,
+        ),
+    );
     return {
       message: "Transferência efetuada com sucesso!",
     };

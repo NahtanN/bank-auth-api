@@ -1,4 +1,7 @@
-import { TransactionRepositoryInterface } from "@domain/transaction/repository/transaction.repository.interface";
+import {
+  TransactionCallback,
+  TransactionRepositoryInterface,
+} from "@domain/transaction/repository/transaction.repository.interface";
 import { TransactionEntity } from "./transaction.typeorm.entity";
 import { DataSource, Repository } from "typeorm";
 import { TransactionEntityInterface } from "@domain/transaction/entity/transaction.entity.interface";
@@ -26,6 +29,7 @@ export class TransactionTypeormRepository
     to: string,
     amount: number,
     description?: string,
+    ...callbacks: TransactionCallback[]
   ): Promise<void> {
     const { queryRunner, manager } = await this.getTransactionManager();
 
@@ -41,9 +45,14 @@ export class TransactionTypeormRepository
         throw AppException.badRequest("Usuário não encontrado.");
       }
 
-      const [{ balance: senderBalanceBefore }]: [{ balance: number }] =
+      const [
+        {
+          banking_details_id: userSenderBankingDetailsId,
+          balance: senderBalanceBefore,
+        },
+      ]: [{ banking_details_id: string; balance: number }] =
         await manager.query(
-          `SELECT balance FROM banking_details WHERE user_id = $1`,
+          `SELECT banking_details_id, balance FROM banking_details WHERE user_id = $1`,
           [userId],
         );
       if (senderBalanceBefore < amount) {
@@ -58,9 +67,14 @@ export class TransactionTypeormRepository
         [amount, userId],
       );
 
-      const [{ balance: receiverBalanceBefore }]: [{ balance: number }] =
+      const [
+        {
+          banking_details_id: userReceiverBankingDetailsId,
+          balance: receiverBalanceBefore,
+        },
+      ]: [{ banking_details_id: string; balance: number }] =
         await manager.query(
-          `SELECT balance FROM banking_details WHERE user_id = $1`,
+          `SELECT banking_details_id, balance FROM banking_details WHERE user_id = $1`,
           [to],
         );
 
@@ -72,20 +86,21 @@ export class TransactionTypeormRepository
         [amount, to],
       );
 
-      await manager.query(
-        `INSERT INTO transactions (user_sender_id, user_receiver_id, amount, sender_balance_before, 
-sender_balance_after, receiver_balance_before, receiver_balance_after, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-        [
-          userId,
-          to,
-          amount,
-          senderBalanceBefore,
-          senderBalanceAfter,
-          receiverBalanceBefore,
-          receiverBalanceAfter,
-          description,
-        ],
-      );
+      const transaction = await manager.save(TransactionEntity, {
+        userSenderId: userId,
+        userSenderBankingDetailsId,
+        userReceiverId: to,
+        userReceiverBankingDetailsId,
+        amount,
+        senderBalanceBefore,
+        senderBalanceAfter,
+        receiverBalanceBefore,
+        receiverBalanceAfter,
+        description,
+      } as TransactionEntityInterface);
+
+      const calls = callbacks.map((callback) => callback(transaction, manager));
+      await Promise.all(calls);
 
       await queryRunner.commitTransaction();
     } catch (error) {

@@ -22,9 +22,21 @@ export class TransactionEntity implements TransactionEntityInterface {
   })
   userSenderId: string;
 
+  @Column({
+    name: "user_sender_banking_details_id",
+    type: "uuid",
+  })
+  userSenderBankingDetailsId: string;
+
   @ManyToOne(() => UserEntity, (user) => user.sentTransactions)
   @JoinColumn({ name: "user_sender_id" })
   userSender: UserEntity;
+
+  @Column({
+    name: "user_receiver_banking_details_id",
+    type: "uuid",
+  })
+  userReceiverBankingDetailsId: string;
 
   @Column({
     name: "user_receiver_id",
