@@ -22,7 +22,6 @@ export class AppBankingDetailsService extends BankingDetailService {
   })
   async handleMessage(message: any) {
     try {
-      console.log("banking details", message);
       await this.createBankingDetails(message);
       return new Nack();
     } catch (error) {

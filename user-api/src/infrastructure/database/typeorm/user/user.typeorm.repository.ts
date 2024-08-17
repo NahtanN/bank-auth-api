@@ -84,11 +84,11 @@ export class UserTypeormRepository implements UserRepositoryInterface {
     }
   }
 
-  async existsByEmail(email: string): Promise<boolean> {
+  async existsByEmail(id: string, email: string): Promise<boolean> {
     try {
       const [result]: [{ exists: boolean }] = await this.userRepository.query(
-        `SELECT EXISTS(SELECT 1 FROM users WHERE email LIKE LOWER(TRIM($1)) AND deleted_at IS NULL)`,
-        [email],
+        `SELECT EXISTS(SELECT 1 FROM users WHERE email LIKE LOWER(TRIM($1)) AND deleted_at IS NULL AND user_id != $2)`,
+        [email, id],
       );
 
       return result.exists;
@@ -102,33 +102,33 @@ export class UserTypeormRepository implements UserRepositoryInterface {
   async update(
     id: string,
     data: UpdateUserRequestInterface,
+    ...callbacks: CreateUserCallback[]
   ): Promise<UserEntityInterface> {
-    let emailExists: boolean;
-    try {
-      const [result]: [{ exists: boolean }] = await this.userRepository.query(
-        `SELECT EXISTS(SELECT 1 FROM users WHERE email LIKE LOWER(TRIM($1)) AND deleted_at IS NULL AND user_id != $2)`,
-        [data.email, id],
-      );
-      emailExists = result.exists;
-    } catch (error) {
-      throw AppException.internalServerError(
-        "Erro ao verificar existência do email.",
-      );
-    }
-
-    if (emailExists) {
-      throw AppException.badRequest("Email já cadastrado.");
-    }
+    const { queryRunner, manager } = await this.getTransactionManager();
 
     try {
-      return this.userRepository.save({
+      await queryRunner.startTransaction();
+
+      const user = await this.userRepository.save({
         userId: id,
         name: data.name,
         email: data.email,
         address: [{ ...data.address, createdBy: id }],
       });
+
+      const calls = callbacks.map((callback) => callback(user, manager));
+      await Promise.all(calls);
+
+      await queryRunner.commitTransaction();
+
+      console.log(user);
+
+      return user;
     } catch (error) {
+      await queryRunner.rollbackTransaction();
       throw AppException.internalServerError("Erro ao atualizar usuário.");
+    } finally {
+      await queryRunner.release();
     }
   }
 }

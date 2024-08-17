@@ -26,7 +26,6 @@ export class AppUserService extends UserService {
     errorBehavior: MessageHandlerErrorBehavior.ACK,
   })
   async handleMessage(message: any) {
-    if (!message) return;
     try {
       await this.createUser(message);
     } catch (error) {

@@ -41,6 +41,7 @@ export class SpecUtils {
       existsByCpf: jest.fn(),
       find: jest.fn(),
       create: jest.fn(),
+      userUpdate: jest.fn(),
     };
   }
 

@@ -36,6 +36,8 @@ export default interface UserRepositoryInterface {
    * @throws ApiError
    * */
   find(value: string): Promise<UserEntityInterface | null>;
+
+  userUpdate(userId: string, name: string, email: string): Promise<void>;
 }
 
 export interface CreateUserCallback {

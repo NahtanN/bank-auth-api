@@ -10,7 +10,7 @@ export class UserTypeormRepository implements UserRepositoryInterface {
   constructor(
     private readonly dataSource: DataSource,
     private readonly userRepository: Repository<UserEntity>,
-  ) {}
+  ) { }
 
   async getTransactionManager() {
     const queryRunner = this.dataSource.createQueryRunner();
@@ -94,6 +94,20 @@ export class UserTypeormRepository implements UserRepositoryInterface {
       throw AppException.internalServerError(
         "Erro ao buscar usuário por email.",
       );
+    }
+  }
+
+  async userUpdate(userId: string, name: string, email: string): Promise<void> {
+    try {
+      console.log(userId, name, email);
+      await this.userRepository.save({
+        userId,
+        name,
+        email,
+      });
+    } catch (error) {
+      console.log(error);
+      throw AppException.internalServerError("Erro ao atualizar usuário.");
     }
   }
 }

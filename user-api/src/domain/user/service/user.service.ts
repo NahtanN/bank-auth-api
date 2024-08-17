@@ -5,6 +5,7 @@ import { UserServiceInterface } from "./user.service.interface";
 import { BankingDetailsEntity } from "@infrastructure/database/typeorm/banking_details/banking_details.typeorm.entity";
 import { AppEvents } from "@shared/events.shared";
 import { UpdateUserRequestInterface } from "./dtos/request/update_user.request.interface";
+import AppException from "@shared/exceptions.shared";
 
 export class UserService implements UserServiceInterface {
   constructor(
@@ -34,7 +35,31 @@ export class UserService implements UserServiceInterface {
   }
 
   async updateUser(id: string, data: UpdateUserRequestInterface) {
-    return this.userRepository.update(id, data);
+    let emailExists = false;
+    try {
+      emailExists = await this.userRepository.existsByEmail(id, data.email);
+    } catch (error) {
+      throw AppException.internalServerError("Erro ao verificar email.");
+    }
+
+    if (emailExists) {
+      throw AppException.badRequest("Email já cadastrado.");
+    }
+
+    return this.userRepository.update(
+      id,
+      data,
+      async (user, transactionManager) =>
+        this.outboxRepository.create(
+          AppEvents.USER_UPDATED,
+          {
+            userId: user.userId,
+            name: user.name,
+            email: user.email,
+          },
+          transactionManager,
+        ),
+    );
   }
 
   /*async updateProfilePicture(id: string) {*/

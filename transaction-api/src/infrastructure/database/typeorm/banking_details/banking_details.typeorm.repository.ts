@@ -16,7 +16,6 @@ export class BankingDetailsTypeormRepository
   ): Promise<void> {
     try {
       const b = await this.bankingDetailsRepository.save(data);
-      console.log("here banking", b);
     } catch (error) {
       Logger.error("Não foi possível salvar os dados bancários.", error);
       throw AppException.internalServerError(

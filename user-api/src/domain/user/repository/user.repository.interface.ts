@@ -28,9 +28,12 @@ export default interface UserRepositoryInterface {
    * */
   find(value: string): Promise<UserEntityInterface | null>;
 
+  existsByEmail(id: string, email: string): Promise<boolean>;
+
   update(
     id: string,
     data: UpdateUserRequestInterface,
+    ...callbacks: CreateUserCallback[]
   ): Promise<UserEntityInterface>;
 }
 

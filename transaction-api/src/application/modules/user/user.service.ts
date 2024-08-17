@@ -27,7 +27,6 @@ export class AppUserService extends UserService {
     errorBehavior: MessageHandlerErrorBehavior.NACK,
   })
   async handleMessage(message: any) {
-    console.log(message);
     try {
       await this.createUser(message);
       return new Nack();

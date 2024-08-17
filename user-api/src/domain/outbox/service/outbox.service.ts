@@ -29,7 +29,6 @@ export class OutboxService implements OutboxServiceInterface {
   }
 
   async handleEvent(event: OutboxEntity): Promise<void> {
-    console.log(event);
     try {
       await this.brokerConnection.publish(
         BANK_EXCHANGE,
