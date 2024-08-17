@@ -4,15 +4,15 @@ import { Interval } from "@nestjs/schedule";
 import { OutboxRepository } from "./repository/outbox.repository";
 import { RabbitMQClients } from "src/application/providers/rabbitmq/config/clients";
 import { ClientProxy } from "@nestjs/microservices";
+import { AmqpConnection } from "@golevelup/nestjs-rabbitmq";
 
 @Injectable()
 export class AppOutboxService extends OutboxService {
   constructor(
-    @Inject(RabbitMQClients.USER)
-    client: ClientProxy,
     outboxRepository: OutboxRepository,
+    amqpConnection: AmqpConnection,
   ) {
-    super(outboxRepository, client);
+    super(outboxRepository, amqpConnection);
   }
 
   @Interval(1000)

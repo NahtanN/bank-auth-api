@@ -10,7 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const prefix = "api";
 
-  app.connectMicroservice<MicroserviceOptions>(userConsumerQueue);
+  /*  app.connectMicroservice<MicroserviceOptions>(userConsumerQueue);*/
 
   app.enableCors();
   app.setGlobalPrefix(prefix);

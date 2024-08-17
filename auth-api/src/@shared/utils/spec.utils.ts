@@ -55,7 +55,7 @@ export class SpecUtils {
 
   clientEventEmmiter(): ClientEventEmmiterInterface {
     return {
-      emit: jest.fn(),
+      publish: jest.fn(),
     };
   }
 
