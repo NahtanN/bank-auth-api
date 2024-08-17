@@ -6,11 +6,13 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { BankingDetailsEntity } from "../banking_details/banking_details.typeorm.entity";
+import { TransactionEntity } from "../transaction/transaction.typeorm.entity";
 
 @Entity("users")
 export class UserEntity implements UserEntityInterface {
@@ -44,4 +46,10 @@ export class UserEntity implements UserEntityInterface {
     (bankingDetails) => bankingDetails.user,
   )
   bankingDetails: BankingDetailsEntity[];
+
+  @ManyToOne(() => TransactionEntity, (transaction) => transaction.userSender)
+  sentTransactions: TransactionEntity[];
+
+  @ManyToOne(() => TransactionEntity, (transaction) => transaction.userReceiver)
+  receivedTransactions: TransactionEntity[];
 }

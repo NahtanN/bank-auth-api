@@ -4,11 +4,10 @@ import { UserRepository } from "./repositories/user.repository";
 import { UserEntity } from "@infrastructure/database/typeorm/user/user.typeorm.entity";
 import { AppUserService } from "./user.service";
 import { OutboxModule } from "../outbox/outbox.module";
-import { UserController } from "./user.controller";
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity]), OutboxModule],
-  controllers: [UserController],
+  controllers: [],
   providers: [
     UserRepository,
     {
