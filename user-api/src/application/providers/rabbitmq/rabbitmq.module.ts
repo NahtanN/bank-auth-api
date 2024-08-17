@@ -8,7 +8,7 @@ import { BANK_EXCHANGE } from "./config/exchange";
       exchanges: [
         {
           name: BANK_EXCHANGE,
-          type: "fanout",
+          type: "topic",
         },
       ],
       uri:

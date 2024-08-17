@@ -22,12 +22,4 @@ export class UserService implements UserServiceInterface {
   async getUser(id: string): Promise<UserEntityInterface> {
     return this.userRepository.find(id);
   }
-
-  /*async updateUser(id: string) {*/
-  /*return { id };*/
-  /*}*/
-
-  /*async updateProfilePicture(id: string) {*/
-  /*return { id };*/
-  /*}*/
 }

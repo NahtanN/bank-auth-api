@@ -7,6 +7,7 @@ import HttpExceptionFilter from "./filters/exception.filter";
 import { OutboxModule } from "./modules/outbox/outbox.module";
 import { ScheduleModule } from "@nestjs/schedule";
 import { TokenGuard } from "./guards/token.guard";
+import { BankingDetailsModule } from "./modules/banking_details/banking_details.module";
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { TokenGuard } from "./guards/token.guard";
     TypeOrmDatabaseModule,
     UserModule,
     OutboxModule,
+    BankingDetailsModule,
   ],
   controllers: [],
   providers: [

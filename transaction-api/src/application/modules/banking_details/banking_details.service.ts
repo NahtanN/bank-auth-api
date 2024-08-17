@@ -3,6 +3,7 @@ import { BankingDetailsRepository } from "./repository/banking_details.repositor
 import { BankingDetailService } from "@domain/banking_details/service/banking_details.service";
 import {
   MessageHandlerErrorBehavior,
+  Nack,
   RabbitSubscribe,
 } from "@golevelup/nestjs-rabbitmq";
 import { BANK_EXCHANGE } from "src/application/providers/rabbitmq/config/exchange";
@@ -20,9 +21,10 @@ export class AppBankingDetailsService extends BankingDetailService {
     errorBehavior: MessageHandlerErrorBehavior.NACK,
   })
   async handleMessage(message: any) {
-    if (!message) return;
     try {
+      console.log("banking details", message);
       await this.createBankingDetails(message);
+      return new Nack();
     } catch (error) {
       Logger.error("Erro ao criar dados bancários", error);
     }

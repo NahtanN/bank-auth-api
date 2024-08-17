@@ -42,9 +42,6 @@ export class UserEntity implements UserEntityInterface {
   @OneToMany(
     () => BankingDetailsEntity,
     (bankingDetails) => bankingDetails.user,
-    {
-      cascade: true,
-    },
   )
   bankingDetails: BankingDetailsEntity[];
 }

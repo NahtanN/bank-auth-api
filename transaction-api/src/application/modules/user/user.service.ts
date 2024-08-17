@@ -7,6 +7,7 @@ import { UserRepository } from "./repositories/user.repository";
 import { OutboxRepository } from "../outbox/repository/outbox.repository";
 import {
   MessageHandlerErrorBehavior,
+  Nack,
   RabbitSubscribe,
 } from "@golevelup/nestjs-rabbitmq";
 import { BANK_EXCHANGE } from "src/application/providers/rabbitmq/config/exchange";
@@ -26,9 +27,10 @@ export class AppUserService extends UserService {
     errorBehavior: MessageHandlerErrorBehavior.NACK,
   })
   async handleMessage(message: any) {
-    if (!message) return;
+    console.log(message);
     try {
       await this.createUser(message);
+      return new Nack();
     } catch (error) {
       Logger.error("Erro ao criar usuário", error);
     }

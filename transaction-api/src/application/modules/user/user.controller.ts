@@ -28,15 +28,4 @@ export class UserController {
 
   @Patch(":id/profile-picture")
   async updateProfilePicture(@Param("id") id: string) { }
-
-  /*@EventPattern(AppEvents.USER_CREATED)*/
-  /*async handleUserCreated(@Payload() data: any, @Ctx() context: any) {*/
-  /*const channel = context.getChannelRef();*/
-  /*try {*/
-  /*await this.service.createUser(data);*/
-  /*channel.ack(context.getMessage());*/
-  /*} catch (error) {*/
-  /*channel.nack(context.getMessage());*/
-  /*}*/
-  /*}*/
 }
