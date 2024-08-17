@@ -38,14 +38,17 @@ export class BankingDetailsTypeormRepository
     }
   }
 
-  async getBalance(userId: string): Promise<number> {
-    const balance = await this.bankingDetailsRepository.findOne({
+  async getBalance(userId: string): Promise<{
+    bankingDetailsId: string;
+    balance: number;
+  }> {
+    return this.bankingDetailsRepository.findOne({
       where: { userId },
       select: {
+        bankingDetailsId: true,
         balance: true,
       },
     });
-    return balance?.balance || 0;
   }
 
   async deposit(
@@ -58,8 +61,9 @@ export class BankingDetailsTypeormRepository
     try {
       await queryRunner.startTransaction();
 
-      const balance = await this.getBalance(userId);
+      const { bankingDetailsId, balance } = await this.getBalance(userId);
       const bankingDetails = await manager.save(BankingDetailsEntity, {
+        bankingDetailsId,
         userId,
         balance: balance + amount,
       });
@@ -89,12 +93,13 @@ export class BankingDetailsTypeormRepository
 
     try {
       await queryRunner.startTransaction();
-      const balance = await this.getBalance(userId);
+      const { bankingDetailsId, balance } = await this.getBalance(userId);
       if (balance < amount) {
         throw AppException.badRequest("Saldo insuficiente.");
       }
 
       const bankingDetails = await manager.save(BankingDetailsEntity, {
+        bankingDetailsId,
         userId,
         balance: balance - amount,
       });
@@ -107,6 +112,9 @@ export class BankingDetailsTypeormRepository
       await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();
+      if (error instanceof AppException) {
+        throw error;
+      }
       throw AppException.internalServerError(
         "Não foi possível realizar o saque.",
       );

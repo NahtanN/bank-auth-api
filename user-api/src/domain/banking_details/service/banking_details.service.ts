@@ -6,7 +6,15 @@ export class BankingDetailsService implements BankingDetailsServiceInterface {
     private readonly bankingDetailsRepository: BankingDetailRepositoryInterface,
   ) { }
 
-  async updateBalance(userId: string, balance: number): Promise<void> {
-    return this.bankingDetailsRepository.updateBalance(userId, balance);
+  async updateBalance(
+    bankingDetailsId: string,
+    userId: string,
+    balance: number,
+  ): Promise<void> {
+    return this.bankingDetailsRepository.updateBalance(
+      bankingDetailsId,
+      userId,
+      balance,
+    );
   }
 }

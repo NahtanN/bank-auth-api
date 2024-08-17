@@ -2,7 +2,10 @@ import { BankingDetailsEntityInterface } from "../entity/banking_details.entity.
 
 export interface BankingDetailsRepositoryInterface {
   createBankingDetails(data: BankingDetailsEntityInterface): Promise<void>;
-  getBalance(userId: string): Promise<number>;
+  getBalance(userId: string): Promise<{
+    bankingDetailsId: string;
+    balance: number;
+  }>;
   deposit(
     userId: string,
     amount: number,

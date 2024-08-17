@@ -19,9 +19,17 @@ export class AppBankingDetailsService extends BankingDetailsService {
     routingKey: AppEvents.BAKING_DETAILS_UPDATED,
     errorBehavior: MessageHandlerErrorBehavior.ACK,
   })
-  async handleMessage(message: { userId: string; balance: number }) {
+  async handleMessage(message: {
+    bankingDetailsId: string;
+    userId: string;
+    balance: number;
+  }) {
     try {
-      await this.updateBalance(message.userId, message.balance);
+      await this.updateBalance(
+        message.bankingDetailsId,
+        message.userId,
+        message.balance,
+      );
     } catch (error) {
       Logger.error("Erro ao criar usuário", error);
     }

@@ -21,6 +21,7 @@ export class TransactionService implements TransactionServiceInterface {
         this.outboxRepository.create(
           AppEvents.BAKING_DETAILS_UPDATED,
           {
+            bankingDetailsId: bankingDetails.bankingDetailsId,
             userId: bankingDetails.userId,
             balance: bankingDetails.balance,
           },
@@ -41,6 +42,7 @@ export class TransactionService implements TransactionServiceInterface {
         this.outboxRepository.create(
           AppEvents.BAKING_DETAILS_UPDATED,
           {
+            bankingDetailsId: bankingDetails.bankingDetailsId,
             userId: bankingDetails.userId,
             balance: bankingDetails.balance,
           },

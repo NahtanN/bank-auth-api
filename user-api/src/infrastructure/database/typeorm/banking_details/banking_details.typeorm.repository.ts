@@ -10,9 +10,16 @@ export class BankingDetailsTypeormRepository
     private readonly bankindDetailRepository: Repository<BankingDetailsEntity>,
   ) { }
 
-  async updateBalance(userId: string, balance: number): Promise<void> {
+  async updateBalance(
+    bankingDetailsId: string,
+    userId: string,
+    balance: number,
+  ): Promise<void> {
     try {
-      await this.bankindDetailRepository.update({ userId }, { balance });
+      await this.bankindDetailRepository.update(
+        { bankingDetailsId, userId },
+        { balance },
+      );
     } catch (error) {
       Logger.error("Erro ao atualizar saldo do usuário", error);
       throw AppException.internalServerError(
