@@ -1,4 +1,7 @@
-import { BankingDetailsRepositoryInterface } from "@domain/banking_details/repository/banking_details.repository.interface";
+import {
+  BankingDetailsCallback,
+  BankingDetailsRepositoryInterface,
+} from "@domain/banking_details/repository/banking_details.repository.interface";
 import { DataSource, Repository } from "typeorm";
 import { BankingDetailsEntity } from "./banking_details.typeorm.entity";
 import { BankingDetailsEntityInterface } from "@domain/banking_details/entity/banking_details.entity.interface";
@@ -11,6 +14,16 @@ export class BankingDetailsTypeormRepository
     private readonly dataSource: DataSource,
     private readonly bankingDetailsRepository: Repository<BankingDetailsEntity>,
   ) { }
+
+  async getTransactionManager() {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+
+    return {
+      queryRunner,
+      manager: queryRunner.manager,
+    };
+  }
 
   async createBankingDetails(
     data: BankingDetailsEntityInterface,
@@ -35,23 +48,70 @@ export class BankingDetailsTypeormRepository
     return balance?.balance || 0;
   }
 
-  async deposit(userId: string, amount: number): Promise<void> {
-    const balance = await this.getBalance(userId);
-    await this.bankingDetailsRepository.update(
-      { userId },
-      { balance: balance + amount },
-    );
+  async deposit(
+    userId: string,
+    amount: number,
+    ...callbacks: BankingDetailsCallback[]
+  ): Promise<void> {
+    const { queryRunner, manager } = await this.getTransactionManager();
+
+    try {
+      await queryRunner.startTransaction();
+
+      const balance = await this.getBalance(userId);
+      const bankingDetails = await manager.save(BankingDetailsEntity, {
+        userId,
+        balance: balance + amount,
+      });
+
+      const calls = callbacks.map((callback) =>
+        callback(bankingDetails, manager),
+      );
+      await Promise.all(calls);
+
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw AppException.internalServerError(
+        "Não foi possível realizar o depósito.",
+      );
+    } finally {
+      await queryRunner.release();
+    }
   }
 
-  async withdraw(userId: string, amount: number): Promise<void> {
-    const balance = await this.getBalance(userId);
-    if (balance < amount) {
-      throw AppException.badRequest("Saldo insuficiente.");
-    }
+  async withdraw(
+    userId: string,
+    amount: number,
+    ...callbacks: BankingDetailsCallback[]
+  ): Promise<void> {
+    const { queryRunner, manager } = await this.getTransactionManager();
 
-    await this.bankingDetailsRepository.update(
-      { userId },
-      { balance: balance - amount },
-    );
+    try {
+      await queryRunner.startTransaction();
+      const balance = await this.getBalance(userId);
+      if (balance < amount) {
+        throw AppException.badRequest("Saldo insuficiente.");
+      }
+
+      const bankingDetails = await manager.save(BankingDetailsEntity, {
+        userId,
+        balance: balance - amount,
+      });
+
+      const calls = callbacks.map((callback) =>
+        callback(bankingDetails, manager),
+      );
+      await Promise.all(calls);
+
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw AppException.internalServerError(
+        "Não foi possível realizar o saque.",
+      );
+    } finally {
+      await queryRunner.release();
+    }
   }
 }
