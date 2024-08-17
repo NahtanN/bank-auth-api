@@ -9,6 +9,12 @@ export class TokenGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
+    const contextType = context.getType<"http" | "rmq">();
+
+    if (contextType === "rmq") {
+      return true;
+    }
+
     const request: Request = context.switchToHttp().getRequest();
     const authHeader = request.headers["authorization"];
 

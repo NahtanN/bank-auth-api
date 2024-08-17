@@ -13,11 +13,18 @@ import { BANK_EXCHANGE } from "src/application/providers/rabbitmq/config/exchang
 import { AppEvents } from "@shared/events.shared";
 
 @Injectable()
-export class AppOutboxService {
-  /*@Interval(1000)*/
-  /*async handleEmitEvents() {*/
-  /*this.emitEvents();*/
-  /*}*/
+export class AppOutboxService extends OutboxService {
+  constructor(
+    outboxRepository: OutboxRepository,
+    amqpConnection: AmqpConnection,
+  ) {
+    super(outboxRepository, amqpConnection);
+  }
+
+  @Interval(1000)
+  async handleEmitEvents() {
+    this.emitEvents();
+  }
 
   @RabbitSubscribe({
     exchange: BANK_EXCHANGE,

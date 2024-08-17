@@ -3,12 +3,14 @@ import { OutboxRepositoryInterface } from "../repository/outbox.repository.inter
 import { OutboxServiceInterface } from "./outbox.service.interface";
 import { OutboxEntity } from "@infrastructure/database/typeorm/outbox/outbox.typeorm.entity";
 import { ClientEventEmmiterInterface } from "@infrastructure/client_event_emmiter/client_event_emmiter.service.interface";
+import { BANK_EXCHANGE } from "src/application/providers/rabbitmq/config/exchange";
+import { Logger } from "@nestjs/common";
 
 export class OutboxService implements OutboxServiceInterface {
   constructor(
     private readonly outboxRepository: OutboxRepositoryInterface,
-    private readonly client: ClientEventEmmiterInterface,
-  ) {}
+    private readonly brokerConnection: ClientEventEmmiterInterface,
+  ) { }
 
   async emitEvents(): Promise<void> {
     let outboxEvents: OutboxEntity[];
@@ -26,14 +28,17 @@ export class OutboxService implements OutboxServiceInterface {
     await Promise.allSettled(sentEvents);
   }
 
-  handleEvent(event: OutboxEntity): void {
-    this.client.emit<void>(event.eventType, event.payload).subscribe(
-      () => {
-        this.outboxRepository.markAsProcessed(event.id);
-      },
-      (error) => {
-        this.outboxRepository.markAsFailed(event.id);
-      },
-    );
+  async handleEvent(event: OutboxEntity): Promise<void> {
+    try {
+      await this.brokerConnection.publish(
+        BANK_EXCHANGE,
+        event.eventType,
+        event.payload,
+      );
+      await this.outboxRepository.markAsProcessed(event.id);
+    } catch (error) {
+      Logger.error("Erro ao enviar evento para o broker.");
+      await this.outboxRepository.markAsFailed(event.id);
+    }
   }
 }

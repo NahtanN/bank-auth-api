@@ -8,7 +8,7 @@ import { OutboxModule } from "../outbox/outbox.module";
 import { RMQModule } from "src/application/providers/rabbitmq/rabbitmq.module";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity]), OutboxModule, RMQModule],
+  imports: [TypeOrmModule.forFeature([UserEntity]), OutboxModule],
   controllers: [UserController],
   providers: [
     UserRepository,

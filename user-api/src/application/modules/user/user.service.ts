@@ -19,15 +19,4 @@ export class AppUserService extends UserService {
   ) {
     super(userRepository, outboxRepository);
   }
-
-  @RabbitSubscribe({
-    exchange: BANK_EXCHANGE,
-    routingKey: "teste",
-    errorBehavior: MessageHandlerErrorBehavior.ACK,
-  })
-  async handleMessage(message: any) {
-    Logger.log(`Email RMQ Payload:` + JSON.stringify(message));
-    console.log(message);
-    console.log(`Service 1 received message: ${message}`);
-  }
 }
