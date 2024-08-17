@@ -16,14 +16,20 @@ export class TransactionEntity implements TransactionEntityInterface {
   })
   transactionId: string;
 
-  @Column("user_sender_id")
+  @Column({
+    name: "user_sender_id",
+    type: "uuid",
+  })
   userSenderId: string;
 
   @ManyToOne(() => UserEntity, (user) => user.sentTransactions)
   @JoinColumn({ name: "user_sender_id" })
   userSender: UserEntity;
 
-  @Column("user_receiver_id")
+  @Column({
+    name: "user_receiver_id",
+    type: "uuid",
+  })
   userReceiverId: string;
 
   @ManyToOne(() => UserEntity, (user) => user.receivedTransactions)

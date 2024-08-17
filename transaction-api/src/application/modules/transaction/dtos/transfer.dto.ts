@@ -1,11 +1,14 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsOptional, IsUUID } from "class-validator";
 
 export class TransferDto {
-  @IsString()
+  @IsUUID()
   @IsNotEmpty()
   to: string;
 
   @IsNumber()
   @IsNotEmpty()
   amount: number;
+
+  @IsOptional()
+  description?: string;
 }

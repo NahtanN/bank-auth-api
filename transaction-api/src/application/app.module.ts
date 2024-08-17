@@ -8,6 +8,7 @@ import { OutboxModule } from "./modules/outbox/outbox.module";
 import { ScheduleModule } from "@nestjs/schedule";
 import { TokenGuard } from "./guards/token.guard";
 import { BankingDetailsModule } from "./modules/banking_details/banking_details.module";
+import { TransactionModule } from "./modules/transaction/transaction.module";
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { BankingDetailsModule } from "./modules/banking_details/banking_details.
     UserModule,
     OutboxModule,
     BankingDetailsModule,
+    TransactionModule,
   ],
   controllers: [],
   providers: [

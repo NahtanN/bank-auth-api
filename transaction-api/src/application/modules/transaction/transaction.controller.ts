@@ -1,5 +1,5 @@
 import { TransactionServiceInterface } from "@domain/transaction/service/transaction.service.interface";
-import { Body, Controller, Inject, Post } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Post } from "@nestjs/common";
 import { version } from "os";
 import { CurrentUser } from "src/application/decorators/current_user.decorator";
 import { DepositDto } from "./dtos/deposit.dto";
@@ -15,6 +15,11 @@ export class TransactionController {
     private readonly service: TransactionServiceInterface,
   ) { }
 
+  @Get("history")
+  async history(@CurrentUser() userId: string) {
+    return this.service.history(userId);
+  }
+
   @Post("deposit")
   async deposit(@CurrentUser() userId: string, @Body() data: DepositDto) {
     return this.service.deposit(userId, data.amount);
@@ -27,11 +32,11 @@ export class TransactionController {
 
   @Post("transfer")
   async transfer(@CurrentUser() userId: string, @Body() data: TransferDto) {
-    return this.service.transfer(userId, data.to, data.amount);
-  }
-
-  @Post("history")
-  async history(@CurrentUser() userId: string) {
-    return this.service.history(userId);
+    return this.service.transfer(
+      userId,
+      data.to,
+      data.amount,
+      data.description,
+    );
   }
 }

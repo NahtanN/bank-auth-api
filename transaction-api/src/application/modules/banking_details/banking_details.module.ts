@@ -11,6 +11,6 @@ import { BankingDetailsRepository } from "./repository/banking_details.repositor
   imports: [TypeOrmModule.forFeature([BankingDetailsEntity]), OutboxModule],
   controllers: [],
   providers: [BankingDetailsRepository, AppBankingDetailsService],
-  exports: [],
+  exports: [BankingDetailsRepository],
 })
 export class BankingDetailsModule { }

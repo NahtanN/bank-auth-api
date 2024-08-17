@@ -5,7 +5,7 @@ export class DepositDto {
   @ApiProperty({
     default: "100",
   })
-  @IsNumber()
+  @IsInt()
   @Min(1)
   amount: number;
 }

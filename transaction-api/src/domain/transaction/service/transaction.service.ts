@@ -2,6 +2,7 @@ import { BankingDetailsRepositoryInterface } from "@domain/banking_details/repos
 import { TransactionServiceInterface } from "./transaction.service.interface";
 import { TransactionRepositoryInterface } from "../repository/transaction.repository.interface";
 import { TransactionEntityInterface } from "../entity/transaction.entity.interface";
+import AppException from "@shared/exceptions.shared";
 
 export class TransactionService implements TransactionServiceInterface {
   constructor(
@@ -9,16 +10,37 @@ export class TransactionService implements TransactionServiceInterface {
     private readonly transactionRepository: TransactionRepositoryInterface,
   ) { }
 
-  deposit(userId: string, amount: number): Promise<void> {
-    return this.bankingDetailsRepository.deposit(userId, amount);
+  async deposit(userId: string, amount: number): Promise<{ message: string }> {
+    await this.bankingDetailsRepository.deposit(userId, amount);
+
+    return {
+      message: "Deposito efetuado com sucesso!",
+    };
   }
 
-  withdraw(userId: string, amount: number): Promise<void> {
-    return this.bankingDetailsRepository.withdraw(userId, amount);
+  async withdraw(userId: string, amount: number): Promise<{ message: string }> {
+    await this.bankingDetailsRepository.withdraw(userId, amount);
+    return {
+      message: "Saque efetuado com sucesso!",
+    };
   }
 
-  transfer(userId: string, to: string, amount: number): Promise<void> {
-    return this.transactionRepository.transfer(userId, to, amount);
+  async transfer(
+    userId: string,
+    to: string,
+    amount: number,
+    description?: string,
+  ): Promise<{ message: string }> {
+    if (userId === to) {
+      throw AppException.badRequest(
+        "Você não pode transferir para você mesmo!",
+      );
+    }
+
+    await this.transactionRepository.transfer(userId, to, amount, description);
+    return {
+      message: "Transferência efetuada com sucesso!",
+    };
   }
 
   history(userId: string): Promise<TransactionEntityInterface[]> {

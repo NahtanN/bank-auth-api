@@ -47,9 +47,9 @@ export class UserEntity implements UserEntityInterface {
   )
   bankingDetails: BankingDetailsEntity[];
 
-  @ManyToOne(() => TransactionEntity, (transaction) => transaction.userSender)
+  @OneToMany(() => TransactionEntity, (transaction) => transaction.userSender)
   sentTransactions: TransactionEntity[];
 
-  @ManyToOne(() => TransactionEntity, (transaction) => transaction.userReceiver)
+  @OneToMany(() => TransactionEntity, (transaction) => transaction.userReceiver)
   receivedTransactions: TransactionEntity[];
 }
