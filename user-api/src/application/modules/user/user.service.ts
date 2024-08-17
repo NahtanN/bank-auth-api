@@ -19,4 +19,18 @@ export class AppUserService extends UserService {
   ) {
     super(userRepository, outboxRepository);
   }
+
+  @RabbitSubscribe({
+    exchange: BANK_EXCHANGE,
+    routingKey: AppEvents.USER_CREATED,
+    errorBehavior: MessageHandlerErrorBehavior.ACK,
+  })
+  async handleMessage(message: any) {
+    if (!message) return;
+    try {
+      await this.createUser(message);
+    } catch (error) {
+      Logger.error("Erro ao criar usuário", error);
+    }
+  }
 }

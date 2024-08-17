@@ -24,14 +24,4 @@ export class AppOutboxService extends OutboxService {
   async handleEmitEvents() {
     this.emitEvents();
   }
-
-  @RabbitSubscribe({
-    exchange: BANK_EXCHANGE,
-    routingKey: "teste",
-    errorBehavior: MessageHandlerErrorBehavior.ACK,
-  })
-  async handleMessage(message: any) {
-    console.log(message);
-    console.log(`Service 1 received message: ${message}`);
-  }
 }
