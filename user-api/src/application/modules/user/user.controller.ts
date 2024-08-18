@@ -22,7 +22,7 @@ export class UserController {
   constructor(
     @Inject("UserServiceInterface")
     private readonly service: UserServiceInterface,
-  ) { }
+  ) {}
 
   @Get()
   async getUser(@CurrentUser() id: string) {
@@ -45,7 +45,6 @@ export class UserController {
     @CurrentUser() id: string,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    console.log(file);
     return this.service.updateProfilePicture(id, file);
   }
 }
