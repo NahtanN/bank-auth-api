@@ -18,7 +18,9 @@ import { TransactionDepositDocs } from "src/application/docs/transaction/deposit
 import { TransactionWithdrawDocs } from "src/application/docs/transaction/withdraw.docs";
 import { TransactionTransferDocs } from "src/application/docs/transaction/transfer.docs";
 import { TransactionTransferDetailsDocs } from "src/application/docs/transaction/transfer_details.docs";
+import { ApiBearerAuth } from "@nestjs/swagger";
 
+@ApiBearerAuth()
 @Controller({
   version: "1",
 })

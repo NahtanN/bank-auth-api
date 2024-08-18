@@ -11,7 +11,7 @@ export class UserTypeormRepository implements UserRepositoryInterface {
   constructor(
     private readonly dataSource: DataSource,
     private readonly userRepository: Repository<UserEntity>,
-  ) { }
+  ) {}
 
   async getTransactionManager() {
     const queryRunner = this.dataSource.createQueryRunner();
@@ -78,9 +78,7 @@ export class UserTypeormRepository implements UserRepositoryInterface {
         },
       });
     } catch (error) {
-      throw AppException.internalServerError(
-        "Erro ao buscar usuário por email.",
-      );
+      throw AppException.internalServerError("Erro ao buscar usuário.");
     }
   }
 
