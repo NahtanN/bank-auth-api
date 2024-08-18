@@ -3,7 +3,7 @@ import { OutboxRepositoryInterface } from "../repository/outbox.repository.inter
 import { OutboxServiceInterface } from "./outbox.service.interface";
 import { OutboxEntity } from "@infrastructure/database/typeorm/outbox/outbox.typeorm.entity";
 import { ClientEventEmmiterInterface } from "@infrastructure/client_event_emmiter/client_event_emmiter.service.interface";
-import { BANK_EXCHANGE } from "src/application/providers/rabbitmq/config/exchange";
+import { BANK_EXCHANGE } from "../../../application/providers/rabbitmq/config/exchange";
 import { Logger } from "@nestjs/common";
 
 export class OutboxService implements OutboxServiceInterface {

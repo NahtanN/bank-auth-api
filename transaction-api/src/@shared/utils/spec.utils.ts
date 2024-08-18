@@ -1,4 +1,6 @@
+import { BankingDetailsRepositoryInterface } from "@domain/banking_details/repository/banking_details.repository.interface";
 import { OutboxRepositoryInterface } from "@domain/outbox/repository/outbox.repository.interface";
+import { TransactionRepositoryInterface } from "@domain/transaction/repository/transaction.repository.interface";
 import { ClientEventEmmiterInterface } from "@infrastructure/client_event_emmiter/client_event_emmiter.service.interface";
 import { OutboxEntity } from "@infrastructure/database/typeorm/outbox/outbox.typeorm.entity";
 import { randomUUID } from "crypto";
@@ -64,5 +66,22 @@ export class SpecUtils {
         createdAt: new Date(),
       },
     ];
+  }
+
+  bankingDetailsRepository(): BankingDetailsRepositoryInterface {
+    return {
+      createBankingDetails: jest.fn(),
+      getBalance: jest.fn(),
+      deposit: jest.fn(),
+      withdraw: jest.fn(),
+    };
+  }
+
+  transactionRepository(): TransactionRepositoryInterface {
+    return {
+      transfer: jest.fn(),
+      history: jest.fn(),
+      transferDetail: jest.fn(),
+    };
   }
 }
