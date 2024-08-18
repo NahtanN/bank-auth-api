@@ -53,11 +53,12 @@ describe("OutboxService", () => {
   describe("handleEvent", () => {
     it("should process an event correctly", async () => {
       const event = specUtils.mockOutboxEvents()[0];
-      clientEventEmmiterMock.emit.mockReturnValue(of(void 0));
+      clientEventEmmiterMock.publish.mockResolvedValue(null);
 
-      outboxService.handleEvent(event);
+      await outboxService.handleEvent(event);
 
-      expect(clientEventEmmiterMock.emit).toHaveBeenCalledWith(
+      expect(clientEventEmmiterMock.publish).toHaveBeenCalledWith(
+        "BANK_EXCHANGE",
         event.eventType,
         event.payload,
       );
@@ -67,15 +68,14 @@ describe("OutboxService", () => {
       expect(outboxRepositoryMock.markAsFailed).not.toHaveBeenCalled();
     });
 
-    it("should call markAsFailed on event emission error", () => {
+    it("should call markAsFailed on event emission error", async () => {
       const event = specUtils.mockOutboxEvents()[0];
-      clientEventEmmiterMock.emit.mockReturnValue(
-        throwError(() => new Error("Failed")),
-      );
+      clientEventEmmiterMock.publish.mockRejectedValueOnce(new Error());
 
-      outboxService.handleEvent(event);
+      await outboxService.handleEvent(event);
 
-      expect(clientEventEmmiterMock.emit).toHaveBeenCalledWith(
+      expect(clientEventEmmiterMock.publish).toHaveBeenCalledWith(
+        "BANK_EXCHANGE",
         event.eventType,
         event.payload,
       );
