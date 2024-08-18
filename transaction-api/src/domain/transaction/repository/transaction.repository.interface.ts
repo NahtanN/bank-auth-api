@@ -9,6 +9,10 @@ export interface TransactionRepositoryInterface {
     ...callbacks: TransactionCallback[]
   ): Promise<void>;
   history(userId: string): Promise<TransactionEntityInterface[]>;
+  transferDetail(
+    userId: string,
+    id: string,
+  ): Promise<TransactionEntityInterface>;
 }
 
 export interface TransactionCallback {

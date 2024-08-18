@@ -132,4 +132,28 @@ export class TransactionTypeormRepository
       );
     }
   }
+
+  async transferDetail(
+    userId: string,
+    id: string,
+  ): Promise<TransactionEntityInterface> {
+    try {
+      return this.transactionRepository
+        .createQueryBuilder("transaction")
+        .leftJoinAndSelect("transaction.userSender", "userSender")
+        .leftJoinAndSelect("transaction.userReceiver", "userReceiver")
+        .where(
+          "(user_sender_id = :userId OR user_receiver_id = :userId) AND transaction_id = :id",
+          {
+            userId,
+            id,
+          },
+        )
+        .getOne();
+    } catch (error) {
+      throw AppException.internalServerError(
+        "Não foi possível buscar os detalhes da transferência.",
+      );
+    }
+  }
 }

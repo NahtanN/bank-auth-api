@@ -10,4 +10,8 @@ export interface TransactionServiceInterface {
     description?: string,
   ): Promise<{ message: string }>;
   history(userId: string): Promise<TransactionEntityInterface[]>;
+  transferDetail(
+    userId: string,
+    id: string,
+  ): Promise<TransactionEntityInterface>;
 }

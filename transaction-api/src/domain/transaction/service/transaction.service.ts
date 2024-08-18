@@ -100,4 +100,11 @@ export class TransactionService implements TransactionServiceInterface {
   history(userId: string): Promise<TransactionEntityInterface[]> {
     return this.transactionRepository.history(userId);
   }
+
+  transferDetail(
+    userId: string,
+    id: string,
+  ): Promise<TransactionEntityInterface> {
+    return this.transactionRepository.transferDetail(userId, id);
+  }
 }

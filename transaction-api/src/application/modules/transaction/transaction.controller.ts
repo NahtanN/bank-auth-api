@@ -1,5 +1,13 @@
 import { TransactionServiceInterface } from "@domain/transaction/service/transaction.service.interface";
-import { Body, Controller, Get, Inject, Post } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Param,
+  ParseUUIDPipe,
+  Post,
+} from "@nestjs/common";
 import { version } from "os";
 import { CurrentUser } from "src/application/decorators/current_user.decorator";
 import { DepositDto } from "./dtos/deposit.dto";
@@ -38,5 +46,13 @@ export class TransactionController {
       data.amount,
       data.description,
     );
+  }
+
+  @Get("transfer/:id")
+  async transferDetail(
+    @CurrentUser() userId: string,
+    @Param("id", ParseUUIDPipe) id: string,
+  ) {
+    return this.service.transferDetail(userId, id);
   }
 }
