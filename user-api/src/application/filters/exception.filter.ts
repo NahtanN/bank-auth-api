@@ -12,6 +12,7 @@ import AppException from "src/@shared/exceptions.shared";
 @Catch()
 export default class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
+    console.log(exception);
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 

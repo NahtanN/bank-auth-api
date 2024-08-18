@@ -8,5 +8,10 @@ export interface UserServiceInterface {
     id: string,
     data: UpdateUserRequestInterface,
   ): Promise<UserEntityInterface>;
-  /*updateProfilePicture(id: string): Promise<UserEntityInterface>;*/
+  updateProfilePicture(
+    id: string,
+    file: Express.Multer.File,
+  ): Promise<{
+    message: string;
+  }>;
 }

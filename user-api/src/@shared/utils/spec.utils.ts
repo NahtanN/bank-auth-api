@@ -40,6 +40,7 @@ export class SpecUtils {
       create: jest.fn(),
       update: jest.fn(),
       existsByEmail: jest.fn(),
+      updateProfilePicture: jest.fn(),
     };
   }
 

@@ -5,6 +5,7 @@ export default interface UserEntityInterface {
   name: string;
   email: string;
   cpf: string;
+  profilePicture?: string;
   acceptedAt: Date;
   createdAt: Date;
   updatedAt: Date;

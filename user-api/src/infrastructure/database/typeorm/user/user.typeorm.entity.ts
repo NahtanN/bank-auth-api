@@ -32,6 +32,9 @@ export class UserEntity implements UserEntityInterface {
   @Column({ type: "varchar" })
   cpf: string;
 
+  @Column({ name: "profile_picture", type: "varchar", nullable: true })
+  profilePicture?: string;
+
   @Column({
     name: "accepted_at",
     type: "timestamptz",

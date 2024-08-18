@@ -29,6 +29,9 @@ exports.up = (pgm) => {
       notNull: true,
       unique: true,
     },
+    profile_picture: {
+      type: "varchar",
+    },
     accepted_at: {
       type: "timestamp with time zone",
       notNull: true,

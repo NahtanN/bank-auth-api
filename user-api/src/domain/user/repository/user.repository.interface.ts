@@ -35,6 +35,8 @@ export default interface UserRepositoryInterface {
     data: UpdateUserRequestInterface,
     ...callbacks: CreateUserCallback[]
   ): Promise<UserEntityInterface>;
+
+  updateProfilePicture(userId: string, profilePicture: string): Promise<void>;
 }
 
 export interface CreateUserCallback {

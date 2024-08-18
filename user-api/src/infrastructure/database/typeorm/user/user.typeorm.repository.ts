@@ -129,4 +129,17 @@ export class UserTypeormRepository implements UserRepositoryInterface {
       await queryRunner.release();
     }
   }
+
+  async updateProfilePicture(
+    userId: string,
+    profilePicture: string,
+  ): Promise<void> {
+    try {
+      await this.userRepository.update({ userId }, { profilePicture });
+    } catch (error) {
+      throw AppException.internalServerError(
+        "Erro ao atualizar foto de perfil.",
+      );
+    }
+  }
 }

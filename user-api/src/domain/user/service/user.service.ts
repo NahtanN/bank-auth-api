@@ -6,11 +6,13 @@ import { BankingDetailsEntity } from "@infrastructure/database/typeorm/banking_d
 import { AppEvents } from "@shared/events.shared";
 import { UpdateUserRequestInterface } from "./dtos/request/update_user.request.interface";
 import AppException from "@shared/exceptions.shared";
+import { FileServiceInterface } from "@domain/files/service/file.service.interface";
 
 export class UserService implements UserServiceInterface {
   constructor(
     private readonly userRepository: UserRepositoryInterface,
     private readonly outboxRepository: OutboxRepositoryInterface,
+    private readonly fileService: FileServiceInterface,
   ) { }
 
   async createUser(payload: Partial<UserEntityInterface>) {
@@ -62,7 +64,16 @@ export class UserService implements UserServiceInterface {
     );
   }
 
-  /*async updateProfilePicture(id: string) {*/
-  /*return { id };*/
-  /*}*/
+  async updateProfilePicture(
+    id: string,
+    file: Express.Multer.File,
+  ): Promise<{ message: string }> {
+    const profilePicture = await this.fileService.uploadFile(file);
+
+    await this.userRepository.updateProfilePicture(id, profilePicture);
+
+    return {
+      message: "Foto de perfil atualizada com sucesso.",
+    };
+  }
 }
