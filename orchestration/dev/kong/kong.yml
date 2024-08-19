@@ -7,11 +7,17 @@ services:
         paths:
           - /auth
   - name: user-api
-    url: http://host.docker.internal:4003
+    url: http://host.docker.internal:4002/api/v1
     routes:
       - name: user
         paths:
           - /user
+  - name: transaction-api
+    url: http://host.docker.internal:4003/api/v1
+    routes:
+      - name: transaction
+        paths:
+          - /transaction
 
 plugins:
   - name: jwt
@@ -24,9 +30,19 @@ plugins:
       header_names:
         - Authorization
 
+  - name: jwt
+    service: transaction-api
+    config:
+      uri_param_names:
+        - jwt
+      claims_to_verify:
+        - exp
+      header_names:
+        - Authorization
+
 consumers:
   - username: user
     jwt_secrets:
-      - key: ${JWT_ISSUER}
-        secret: ${JWT_SECRET}
+      - key: issuer-key
+        secret: secret
         algorithm: HS384

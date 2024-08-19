@@ -1,0 +1,354 @@
+{
+	"info": {
+		"_postman_id": "307c4b62-cf88-458a-8630-328db1631f5b",
+		"name": "Loomi Bank",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27651664"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Sign Up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Nathan\",\n\t\"email\": \"nathan@neri.com\",\n\t\"cpf\": \"616.024.800-60\",\n\t\"password\": \"123\",\n\t\"confirmPassword\": \"123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://kong-3c59e0f86busipauo.kongcloud.dev/auth/sign-up",
+							"protocol": "http",
+							"host": [
+								"kong-3c59e0f86busipauo",
+								"kongcloud",
+								"dev"
+							],
+							"path": [
+								"auth",
+								"sign-up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign In",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Extract the value from the response",
+									"var responseJson = JSON.parse(responseBody);",
+									"var extractedValue = responseJson.accessToken;",
+									"",
+									"// Set the value in the collection variables",
+									"pm.collectionVariables.set(\"ACCESS_TOKEN\", extractedValue);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"login\": \"nathan@neri.com\",\n\t\"password\": \"123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://kong-3c59e0f86busipauo.kongcloud.dev/auth/sign-in",
+							"protocol": "http",
+							"host": [
+								"kong-3c59e0f86busipauo",
+								"kongcloud",
+								"dev"
+							],
+							"path": [
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get User Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://kong-3c59e0f86busipauo.kongcloud.dev/user/",
+							"protocol": "http",
+							"host": [
+								"kong-3c59e0f86busipauo",
+								"kongcloud",
+								"dev"
+							],
+							"path": [
+								"user",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Teste\",\n\t\"email\": \"teste@teste.com\",\n\t\"address\": {\n\t\t\"zipcode\": \"2345\",\n\t\t\"state\": \"AL\",\n\t\t\"city\": \"Maceió\",\n\t\t\"neighborhood\": \"zxcvcxvzerde\",\n\t\t\"street\": \"asdfad\",\n\t\t\"number\": \"234234\"\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://kong-3c59e0f86busipauo.kongcloud.dev/user/",
+							"protocol": "http",
+							"host": [
+								"kong-3c59e0f86busipauo",
+								"kongcloud",
+								"dev"
+							],
+							"path": [
+								"user",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile Picture",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/home/nahtann/Pictures/arthur_calvo.webp"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://kong-3c59e0f86busipauo.kongcloud.dev/user/profile-picture",
+							"protocol": "http",
+							"host": [
+								"kong-3c59e0f86busipauo",
+								"kongcloud",
+								"dev"
+							],
+							"path": [
+								"user",
+								"profile-picture"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transaction",
+			"item": [
+				{
+					"name": "Deposit",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 100\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://kong-3c59e0f86busipauo.kongcloud.dev/transaction/deposit",
+							"protocol": "http",
+							"host": [
+								"kong-3c59e0f86busipauo",
+								"kongcloud",
+								"dev"
+							],
+							"path": [
+								"transaction",
+								"deposit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Withdraw",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"amount\": 20\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://kong-3c59e0f86busipauo.kongcloud.dev/transaction/withdraw",
+							"protocol": "http",
+							"host": [
+								"kong-3c59e0f86busipauo",
+								"kongcloud",
+								"dev"
+							],
+							"path": [
+								"transaction",
+								"withdraw"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"to\": \"d37966cf-af0d-4eec-87da-627d5867206f\",\n\t\"amount\": 50,\n\t\"description\": \"teste\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://kong-3c59e0f86busipauo.kongcloud.dev/transaction/transfer",
+							"protocol": "http",
+							"host": [
+								"kong-3c59e0f86busipauo",
+								"kongcloud",
+								"dev"
+							],
+							"path": [
+								"transaction",
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer Details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://kong-3c59e0f86busipauo.kongcloud.dev/transaction/transfer",
+							"protocol": "http",
+							"host": [
+								"kong-3c59e0f86busipauo",
+								"kongcloud",
+								"dev"
+							],
+							"path": [
+								"transaction",
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "History",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://kong-3c59e0f86busipauo.kongcloud.dev/transaction/history",
+							"protocol": "http",
+							"host": [
+								"kong-3c59e0f86busipauo",
+								"kongcloud",
+								"dev"
+							],
+							"path": [
+								"transaction",
+								"history"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{ACCESS_TOKEN}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "ACCESS_TOKEN",
+			"value": ""
+		}
+	]
+}

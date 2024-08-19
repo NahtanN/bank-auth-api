@@ -1,0 +1,160 @@
+version: "3.8"
+
+services:
+  kong:
+    image: kong:3.7
+    environment:
+      KONG_DATABASE: "off"
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
+      KONG_DECLARATIVE_CONFIG: /etc/kong/kong.yml
+    ports:
+      - "8004:8000" # Kong proxy port
+      - "8443:8443" # Kong proxy SSL port
+      - "8001:8001" # Kong admin API port
+      - "8444:8444" # Kong admin API SSL port
+    volumes:
+      - ./kong:/etc/kong/
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: root
+      RABBITMQ_DEFAULT_PASS: root
+      RABBITMQ_PORT: 5672
+      RABBITMQ_HOST: rabbitmq
+    ports:
+      - 5672:5672
+      - "15672:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
+  auth-api-database:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: auth
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "54321:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  auth-api:
+    image: nahtann/loomi-bank-auth-api:latest
+    depends_on:
+      auth-api-database:
+        condition: service_healthy
+    ports:
+      - "4001:4001"
+    environment:
+      JWT_SECRET: secret
+      JWT_ISSUER: issuer-key
+      NODE_ENV: production
+      PORT: 4001
+      APP_URL: http://localhost:4001
+      DATABASE_HOST: auth-api-database
+      DATABASE_PORT: 5432
+      DATABASE_SCHEMA: auth
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: password
+      DATABASE_URL: postgresql://postgres:password@auth-api-database:5432/auth
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: root
+      RABBITMQ_PASS: root
+      RABBITMQ_PORT: 5672
+      RABBITMQ_VHOST: vhost
+
+  user-api-database:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: user
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "54322:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  user-api:
+    image: nahtann/loomi-bank-user-api:latest
+    depends_on:
+      user-api-database:
+        condition: service_healthy
+    ports:
+      - "4002:4002"
+    environment:
+      JWT_SECRET: secret
+      JWT_ISSUER: issuer-key
+      NODE_ENV: production
+      PORT: 4002
+      APP_URL: http://localhost:4002
+      DATABASE_HOST: user-api-database
+      DATABASE_PORT: 5432
+      DATABASE_SCHEMA: user
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: password
+      DATABASE_URL: postgresql://postgres:password@user-api-database:5432/user
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: root
+      RABBITMQ_PASS: root
+      RABBITMQ_PORT: 5672
+      RABBITMQ_VHOST: vhost
+      AWS_ACCESS_KEY_ID:
+      AWS_SECRET_ACCESS_KEY:
+      AWS_REGION:
+      AWS_BUCKET_NAME:
+
+  transaction-api-database:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: transaction
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "54323:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  transaction-api:
+    image: nahtann/loomi-bank-transaction-api:latest
+    depends_on:
+      transaction-api-database:
+        condition: service_healthy
+    ports:
+      - "4003:4003"
+    environment:
+      JWT_SECRET: secret
+      JWT_ISSUER: issuer-key
+      NODE_ENV: production
+      PORT: 4003
+      APP_URL: http://localhost:4003
+      DATABASE_HOST: transaction-api-database
+      DATABASE_PORT: 5432
+      DATABASE_SCHEMA: transaction
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: password
+      DATABASE_URL: postgresql://postgres:password@transaction-api-database:5432/transaction
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: root
+      RABBITMQ_PASS: root
+      RABBITMQ_PORT: 5672
+      RABBITMQ_VHOST: vhost
+
+volumes:
+  rabbitmq-data:
